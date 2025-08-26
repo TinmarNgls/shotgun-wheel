@@ -3,8 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// @ts-ignore
-import * as animeJs from 'animejs';
 import { format } from 'date-fns';
 
 interface LotteryWheelProps {
@@ -29,6 +27,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const [internalResult, setInternalResult] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [animationClass, setAnimationClass] = useState('');
   const wheelRef = useRef<HTMLImageElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   
@@ -39,7 +38,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   // Effect to handle external spinning state changes
   useEffect(() => {
     if (externalIsSpinning && wheelRef.current) {
-      spinWheelWithAnime();
+      spinWheelWithCSS();
     }
   }, [externalIsSpinning]);
 
@@ -52,43 +51,48 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   }, [result]);
 
-  const spinWheelWithAnime = () => {
+  const spinWheelWithCSS = () => {
     if (!wheelRef.current || isSpinning) return;
     
     setInternalIsSpinning(true);
     setInternalResult(null);
     
-    // Generate random number of rotations (5-8 full rotations + random angle)
-    const spins = Math.floor(Math.random() * 4) + 5;
+    // Generate random number of rotations (7-9 full rotations + random angle)
+    const spins = Math.floor(Math.random() * 3) + 7;
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
     // Calculate winning prize based on final angle
-    const finalAngle = (rotation + totalRotation) % 360;
+    const finalAngle = totalRotation % 360;
     const sectionSize = 360 / prizes.length;
     const winningIndex = Math.floor(finalAngle / sectionSize);
     const winningPrize = prizes[winningIndex];
     
-    // Animate with anime.js
-    // @ts-ignore
-    animeJs({
-      targets: wheelRef.current,
-      rotate: rotation + totalRotation,
-      duration: 3500,
-      easing: 'easeOutQuart',
-      complete: () => {
-        setRotation(prev => prev + totalRotation);
-        setInternalIsSpinning(false);
-        
-        // Handle result based on whether there's an external handler
-        if (onSpin) {
-          // External handler will manage the result
-        } else {
-          setInternalResult(winningPrize.text);
-          onComplete(winningPrize.value);
-        }
+    // Remove any existing animation class and force reflow
+    setAnimationClass('');
+    if (wheelRef.current) {
+      void wheelRef.current.offsetWidth; // Force reflow
+    }
+    
+    // Add the appropriate animation class based on number of spins
+    const animationClasses = ['wheel-spinning', 'wheel-spinning-alt', 'wheel-spinning-extra'];
+    const selectedClass = animationClasses[(spins - 7) % 3];
+    setAnimationClass(selectedClass);
+    
+    // Set final rotation and handle completion after animation
+    setTimeout(() => {
+      setRotation(totalRotation % 360);
+      setInternalIsSpinning(false);
+      setAnimationClass('');
+      
+      // Handle result based on whether there's an external handler
+      if (onSpin) {
+        // External handler will manage the result
+      } else {
+        setInternalResult(winningPrize.text);
+        onComplete(winningPrize.value);
       }
-    });
+    }, 3500);
   };
 
   const spinWheel = () => {
@@ -99,7 +103,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     if (onSpin) {
       onSpin();
     } else {
-      spinWheelWithAnime();
+      spinWheelWithCSS();
     }
   };
 
@@ -111,9 +115,11 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           ref={wheelRef}
           src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
           alt="Jogwheel" 
-          className="w-full h-full object-contain"
+          className={`w-full h-full object-contain ${animationClass}`}
           style={{ 
-            transform: `rotate(${rotation}deg)`,
+            transform: animationClass ? 'none' : `rotate(${rotation}deg)`,
+            transformOrigin: '50% 50%',
+            willChange: 'transform',
             filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
           }}
         />
