@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
@@ -21,14 +20,28 @@ const prizes = [
   { text: "20% Discount", value: "20% voucher", color: "text-accent" },
 ];
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'lottie-player': {
+        id?: string;
+        src?: string;
+        background?: string;
+        style?: React.CSSProperties;
+        autoplay?: string;
+        loop?: string;
+        ref?: React.RefObject<any>;
+      };
+    }
+  }
+}
+
 export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinning, result: externalResult }: LotteryWheelProps) => {
   const { toast } = useToast();
   const [internalIsSpinning, setInternalIsSpinning] = useState(false);
   const [internalResult, setInternalResult] = useState<string | null>(null);
-  const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [currentAnimation, setCurrentAnimation] = useState<Animation | null>(null);
-  const wheelRef = useRef<HTMLImageElement>(null);
+  const playerRef = useRef<any>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   
   // Use external state if provided, otherwise use internal state
@@ -37,8 +50,8 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
 
   // Effect to handle external spinning state changes
   useEffect(() => {
-    if (externalIsSpinning && wheelRef.current) {
-      spinWheelWithWebAPI();
+    if (externalIsSpinning && playerRef.current) {
+      spinLottieWheel();
     }
   }, [externalIsSpinning]);
 
@@ -51,125 +64,76 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   }, [result]);
 
-  const spinWheelWithWebAPI = () => {
-    console.log('🚀 spinWheelWithWebAPI called, wheelRef.current:', !!wheelRef.current, 'isSpinning:', isSpinning);
-    if (!wheelRef.current || isSpinning) {
-      console.log('❌ Early return - no ref or already spinning');
+  const spinLottieWheel = () => {
+    if (!playerRef.current || isSpinning) {
       return;
     }
-    console.log('🎯 Starting Web Animations API spin');
+
     setInternalIsSpinning(true);
     
-    // Stop any existing animation
-    if (currentAnimation) {
-      currentAnimation.cancel();
-      setCurrentAnimation(null);
-    }
-    
-    // Calculate spin parameters for realistic wheel behavior
-    const spins = 7 + Math.floor(Math.random() * 3); // 7-9 full rotations
-    const randomAngle = Math.floor(Math.random() * 360);
-    const totalRotation = spins * 360 + randomAngle;
-    
-    console.log('🎲 Spin details:', { spins, randomAngle, totalRotation });
-    
-    // Calculate winning prize based on final angle
-    const finalAngle = totalRotation % 360;
-    const sectionSize = 360 / prizes.length;
-    const winningIndex = Math.floor(finalAngle / sectionSize);
-    const winningPrize = prizes[winningIndex];
-    
-    console.log('🏆 Winning prize calculated:', winningPrize);
-    
-    // Check for Web Animations API support
-    if (!wheelRef.current.animate) {
-      console.error('❌ Web Animations API not supported');
-      setInternalIsSpinning(false);
-      return;
-    }
-    
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    // Start the Web Animations API animation
-    console.log('🎬 Creating animation from', rotation, 'to', rotation + totalRotation);
-    try {
-      const animation = wheelRef.current.animate(
-        [
-          { transform: `rotate(${rotation}deg)` },
-          { transform: `rotate(${rotation + totalRotation}deg)` }
-        ],
-        {
-          duration: prefersReducedMotion ? 100 : 3500,
-          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          fill: 'forwards'
-        }
-      );
-    
-      setCurrentAnimation(animation);
-      console.log('🎨 Web Animation started successfully');
-      
-      // Handle animation completion
-    animation.finished.then(() => {
-      console.log('✅ Web Animation completed');
-      setRotation((rotation + totalRotation) % 360);
-      setInternalIsSpinning(false);
-      setCurrentAnimation(null);
-      
-      // Handle result based on whether there's an external handler
-      if (onSpin) {
-        console.log('🔄 External handler will manage result');
-      } else {
+    // Reset and play the Lottie animation
+    playerRef.current.stop();
+    playerRef.current.play();
+
+    // If no external handler, we need to handle result internally
+    if (!onSpin) {
+      // Generate a random prize after animation duration
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * prizes.length);
+        const winningPrize = prizes[randomIndex];
+        
+        setInternalIsSpinning(false);
         setInternalResult(winningPrize.text);
         onComplete(winningPrize.value);
-        console.log('🎊 Internal result set:', winningPrize.text);
-      }
-      }).catch((error) => {
-        console.error('❌ Animation failed:', error);
-        setInternalIsSpinning(false);
-        setCurrentAnimation(null);
-      });
-    } catch (error) {
-      console.error('❌ Failed to create animation:', error);
-      setInternalIsSpinning(false);
+      }, 3000); // Approximate duration of Lottie animation
     }
   };
 
   const spinWheel = () => {
-    console.log('spinWheel called, isSpinning:', isSpinning);
     if (isSpinning) return;
     
     // Call onSpin if provided, otherwise handle internally
     if (onSpin) {
       onSpin();
     } else {
-      spinWheelWithWebAPI();
+      spinLottieWheel();
     }
   };
+
+  // Handle Lottie animation complete event
+  useEffect(() => {
+    if (playerRef.current) {
+      const player = playerRef.current;
+      
+      const handleComplete = () => {
+        if (onSpin) {
+          // External handler will manage the result
+          setInternalIsSpinning(false);
+        }
+      };
+
+      player.addEventListener('complete', handleComplete);
+      
+      return () => {
+        player.removeEventListener('complete', handleComplete);
+      };
+    }
+  }, [onSpin]);
 
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative w-80 h-80">
-        {/* Wheel Container */}
-        <img 
-          ref={wheelRef}
-          src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
-          alt="Jogwheel" 
-          className="w-full h-full object-contain"
-          style={{ 
-            transform: currentAnimation ? undefined : `rotate(${rotation}deg)`,
-            transformOrigin: 'center center',
-            willChange: 'transform',
-            filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
-          }}
+        {/* Lottie Wheel */}
+        <lottie-player
+          ref={playerRef}
+          id="jogwheel"
+          src="https://lottie.host/d8e0176d-8d74-46ed-b107-4f9a7b3d1ff5/6fhNis5qmi.lottie"
+          background="transparent"
+          style={{ width: '100%', height: '100%' }}
+          autoplay="false"
+          loop="false"
         />
-        
-        {/* Pointer */}
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-b-6 border-l-transparent border-r-transparent border-b-blue-400 z-20 shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
-             style={{ borderLeftWidth: '6px', borderRightWidth: '6px', borderBottomWidth: '12px' }}></div>
       </div>
-      
-      {/* Spin Button removed - now handled by parent */}
       
       {/* Result Display */}
       {result && (
