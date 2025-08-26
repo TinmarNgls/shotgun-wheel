@@ -23,7 +23,7 @@ export const AppStoreBadges = ({ onDownload }: AppStoreBadgesProps) => {
         <img 
           src="/lovable-uploads/d5ed4c9b-f8d0-47ed-85eb-484e64ce7e1a.png" 
           alt="Download on the App Store"
-          className="h-10 w-auto rounded-lg"
+          className="h-10 w-auto"
         />
       </button>
 
@@ -35,7 +35,7 @@ export const AppStoreBadges = ({ onDownload }: AppStoreBadgesProps) => {
         <img 
           src="/lovable-uploads/534afd72-b1cf-4b87-9a51-73f5edd90b1e.png" 
           alt="Get it on Google Play"
-          className="h-10 w-auto rounded-lg"
+          className="h-10 w-auto"
         />
       </button>
     </div>
