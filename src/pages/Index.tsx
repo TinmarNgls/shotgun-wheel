@@ -80,7 +80,6 @@ const Index = () => {
           email: email.trim()
         })
       });
-
       if (response.ok) {
         updateStepStatus(4, 'completed');
         setCurrentStep(5);
@@ -114,14 +113,12 @@ const Index = () => {
       status: index === 0 ? 'active' : 'pending'
     })));
   };
-
   const goToNextStep = () => {
     if (currentStep < 5 && !finalResult) {
       setCurrentStep(currentStep + 1);
       updateStepStatus(currentStep + 1, 'active');
     }
   };
-
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
@@ -163,13 +160,7 @@ const Index = () => {
               <AppStoreBadges onDownload={handleDownload} />
               
               <div className="pt-4 border-t border-border/50">
-                <Button 
-                  onClick={handleDownload}
-                  variant="outline" 
-                  className="w-full"
-                >
-                  I Already Have the App
-                </Button>
+                
               </div>
             </div>
           </Card>}
@@ -284,27 +275,14 @@ const Index = () => {
           </Card>}
 
         {/* Navigation Buttons */}
-        {!finalResult && (
-          <div className="flex justify-between gap-4">
-            {currentStep > 1 && (
-              <Button 
-                onClick={goToPreviousStep} 
-                variant="outline"
-                className="flex-1"
-              >
+        {!finalResult && <div className="flex justify-between gap-4">
+            {currentStep > 1 && <Button onClick={goToPreviousStep} variant="outline" className="flex-1">
                 Previous
-              </Button>
-            )}
-            {currentStep < 5 && (
-              <Button 
-                onClick={goToNextStep} 
-                className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
-              >
+              </Button>}
+            {currentStep < 5 && <Button onClick={goToNextStep} className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}>
                 Next
-              </Button>
-            )}
-          </div>
-        )}
+              </Button>}
+          </div>}
       </div>
     </div>;
 };
