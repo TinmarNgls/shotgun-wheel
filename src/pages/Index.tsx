@@ -154,9 +154,7 @@ const Index = () => {
                 
                 <span>Download Shotgun App</span>
               </div>
-              <p className="text-muted-foreground">
-                First, download the Shotgun app from your device's app store
-              </p>
+              
               <AppStoreBadges onDownload={handleDownload} />
               
               
