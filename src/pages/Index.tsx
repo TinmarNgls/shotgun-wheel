@@ -6,7 +6,7 @@ import { Loader2, CheckCircle, XCircle, ExternalLink, Mail, Download, Target } f
 import { ProgressIndicator } from '@/components/ProgressIndicator';
 import { AppStoreBadges } from '@/components/AppStoreBadges';
 import { LotteryWheel } from '@/components/LotteryWheel';
-import shotgunLogo from '@/assets/shotgun-logo.png';
+import shotgunLogo from '/lovable-uploads/f73cf581-d949-480b-9d60-76d7f8bc289d.png';
 
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
 
@@ -146,7 +146,7 @@ const Index = () => {
             <img 
               src={shotgunLogo} 
               alt="Shotgun App" 
-              className="w-20 h-20 rounded-2xl shadow-glow"
+              className="w-20 h-20 rounded-xl shadow-glow bg-white p-2"
             />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
