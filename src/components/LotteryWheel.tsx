@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
@@ -109,7 +110,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
               </p>
               <div className="flex items-center justify-center gap-3 mt-6">
                 <div 
-                  className="px-6 py-3 rounded-lg font-bold text-lg tracking-wider"
+                  className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
                   style={{
                     background: 'linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)',
                     color: '#1B1B1B'
