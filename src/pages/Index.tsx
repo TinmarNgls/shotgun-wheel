@@ -70,8 +70,8 @@ const Index = () => {
     setIsVerifying(true);
     setVerificationError('');
     try {
-      // Mock webhook call - replace with actual webhook URL
-      const response = await fetch('https://example.com/webhook', {
+      // Webhook call to Make.com
+      const response = await fetch('https://hook.eu1.make.com/v47hppeo14q2w5klcrfgpjdsv3ohv3ah', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -81,17 +81,14 @@ const Index = () => {
         })
       });
 
-      // Since we're using a dummy URL, simulate responses
-      const mockSuccess = Math.random() > 0.3; // 70% success rate for demo
-
-      if (mockSuccess) {
+      if (response.ok) {
         updateStepStatus(4, 'completed');
         setCurrentStep(5);
         updateStepStatus(5, 'active');
       } else {
-        const errorMessages = ["You didn't follow Shotgun yet. Please follow us first!", "We couldn't find this email in our system.", "Please enable notifications to continue."];
-        const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-        setVerificationError(randomError);
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.message || "We couldn't verify your account. Please make sure you've followed Shotgun and enabled notifications.";
+        setVerificationError(errorMessage);
         updateStepStatus(4, 'error');
         setCurrentStep(2); // Go back to follow step
         updateStepStatus(2, 'active');
