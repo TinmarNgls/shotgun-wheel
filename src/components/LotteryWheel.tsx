@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 // @ts-ignore
-const anime = require('animejs');
+import * as animeJs from 'animejs';
 
 interface LotteryWheelProps {
   onComplete: (result: string) => void;
@@ -59,7 +59,8 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const winningPrize = prizes[winningIndex];
     
     // Animate with anime.js
-    anime({
+    // @ts-ignore
+    animeJs({
       targets: wheelRef.current,
       rotate: rotation + totalRotation,
       duration: 3500,
