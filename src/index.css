@@ -142,27 +142,17 @@
 @layer components {
   /* Typography Components */
   .heading-1 {
-    color: hsl(var(--text-white));
-    font-family: 'PP Monument Extended', 'Inter', sans-serif;
-    font-size: var(--heading-1-size);
-    line-height: var(--heading-1-line-height);
-    font-weight: 400;
+    color: #FFFFFF;
+    font-family: 'PP Monument Extended', sans-serif;
+    font-size: 24px;
+    line-height: 30px;
   }
   
   .heading-3 {
-    color: hsl(var(--text-white));
-    font-family: 'PP Monument Extended', 'Inter', sans-serif;
-    font-size: var(--heading-3-size);
-    line-height: var(--heading-3-line-height);
-    font-weight: 400;
-  }
-  
-  .body-regular {
-    color: hsl(var(--text-white));
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: var(--body-regular-size);
-    line-height: var(--body-regular-line-height);
-    font-weight: 500;
+    color: #FFFFFF;
+    font-family: 'PP Monument Extended', sans-serif;
+    font-size: 14px;
+    line-height: 17px;
   }
 
   /* Custom Component Styles */
