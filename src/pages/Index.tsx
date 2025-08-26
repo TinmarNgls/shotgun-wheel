@@ -9,18 +9,17 @@ import { LotteryWheel } from '@/components/LotteryWheel';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import shotgunLogo from '/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png';
-
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
-
 interface Step {
   id: number;
   title: string;
   description: string;
   status: StepStatus;
 }
-
 const Index = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [email, setEmail] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
@@ -58,26 +57,22 @@ const Index = () => {
     description: 'Win amazing prizes!',
     status: 'pending'
   }]);
-
   const updateStepStatus = (stepId: number, status: StepStatus) => {
     setSteps(prev => prev.map(step => step.id === stepId ? {
       ...step,
       status
     } : step));
   };
-
   const handleDownload = () => {
     updateStepStatus(1, 'completed');
     setCurrentStep(2);
     updateStepStatus(2, 'active');
   };
-
   const handleFollowComplete = () => {
     updateStepStatus(2, 'completed');
     setCurrentStep(3);
     updateStepStatus(3, 'active');
   };
-
   const handleEmailSubmit = async () => {
     if (!email.trim()) return;
     updateStepStatus(3, 'completed');
@@ -96,9 +91,8 @@ const Index = () => {
           email: email.trim()
         })
       });
-      
       const responseText = await response.text();
-      
+
       // Try to parse JSON response to get shotguner_id
       let webhookData = null;
       try {
@@ -106,23 +100,19 @@ const Index = () => {
       } catch (e) {
         // Fallback to text response for legacy support
       }
-      
-      if (responseText === 'OK' || (webhookData && webhookData.status === 'OK')) {
+      if (responseText === 'OK' || webhookData && webhookData.status === 'OK') {
         setIsVerified(true);
-        
+
         // Extract shotguner_id if available in JSON response
         if (webhookData && webhookData.shotguner_id) {
           setShotgunerId(webhookData.shotguner_id);
         }
-        
         updateStepStatus(4, 'completed');
         setCurrentStep(5);
         updateStepStatus(5, 'active');
       } else {
         setIsVerified(false);
-        const errorMessage = responseText === 'Accepted' || !responseText.trim() 
-          ? 'missing error code' 
-          : responseText;
+        const errorMessage = responseText === 'Accepted' || !responseText.trim() ? 'missing error code' : responseText;
         setVerificationError(errorMessage);
         updateStepStatus(4, 'error');
       }
@@ -133,35 +123,33 @@ const Index = () => {
       setIsVerifying(false);
     }
   };
-
   const handleLotteryComplete = (result: string) => {
     setFinalResult(result);
     setWheelResult(result);
     setIsSpinning(false);
     updateStepStatus(5, 'completed');
   };
-
   const handleSpin = async () => {
     if (isSpinning || isCheckingSpinEligibility) return;
-    
+
     // Check if we have shotgunerId, create a unique fallback based on email for testing
     const userShotgunerId = shotgunerId || Math.abs(email.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
+      a = (a << 5) - a + b.charCodeAt(0);
       return a & a;
     }, 0));
-    
     setIsCheckingSpinEligibility(true);
     setSpinError('');
-    
     try {
       // Call our backend spin function
-      const { data, error } = await supabase.functions.invoke('spin-wheel', {
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke('spin-wheel', {
         body: {
           shotguner_id: userShotgunerId,
           shotguner_email: email
         }
       });
-
       console.log('Spin response - data:', data);
       console.log('Spin response - error:', error);
 
@@ -187,7 +175,7 @@ const Index = () => {
       // Backend determined the result, now animate the wheel
       setIsSpinning(true);
       setIsCheckingSpinEligibility(false);
-      
+
       // Simulate wheel spinning animation
       setTimeout(() => {
         let displayResult = '';
@@ -196,17 +184,14 @@ const Index = () => {
         } else {
           displayResult = '🙃 Try Again';
         }
-        
         handleLotteryComplete(displayResult);
       }, 3000);
-
     } catch (error) {
       console.error('Network error spinning wheel:', error);
       setSpinError('Network error. Please check your connection and try again.');
       setIsCheckingSpinEligibility(false);
     }
   };
-
   const resetProcess = () => {
     setCurrentStep(1);
     setEmail('');
@@ -217,7 +202,6 @@ const Index = () => {
       status: index === 0 ? 'active' : 'pending'
     })));
   };
-
   const goToNextStep = () => {
     if (currentStep === 4 && !isVerified) {
       // If verification failed, go back to email step
@@ -230,19 +214,18 @@ const Index = () => {
       updateStepStatus(currentStep + 1, 'active');
     }
   };
-
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       // If on step 5 (wheel), go back to step 3 (email) to skip verification screen
       const targetStep = currentStep === 5 ? 3 : currentStep - 1;
       setCurrentStep(targetStep);
       updateStepStatus(targetStep, 'active');
-      
+
       // Clear any verification errors when going back
       if (verificationError) {
         setVerificationError('');
       }
-      
+
       // Reset wheel-related states when going back from wheel step
       if (currentStep === 5) {
         setFinalResult(null);
@@ -254,7 +237,6 @@ const Index = () => {
       }
     }
   };
-
   return <div className="min-h-screen py-8 px-4 relative">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
@@ -291,11 +273,7 @@ const Index = () => {
                 From the app, follow Shotgun page and enable push & emails
               </p>
               
-              <Button 
-                asChild 
-                variant="cta"
-                className="inline-flex items-center space-x-2"
-              >
+              <Button asChild variant="cta" className="inline-flex items-center space-x-2">
                 <a href="https://shotgun.live/en/venues/shotgun" target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-5 h-5" />
                   <span>Go to Shotgun Page</span>
@@ -318,20 +296,11 @@ const Index = () => {
               
               <div className="space-y-4 max-w-sm mx-auto">
                 <Input type="email" placeholder="your-email@example.com" value={email} onChange={e => setEmail(e.target.value)} className="text-center bg-input border-border focus:border-primary" />
-                <Button 
-                  onClick={handleEmailSubmit} 
-                  disabled={!email.trim() || isVerifying} 
-                  variant="cta" 
-                  className="w-full"
-                >
-                  {isVerifying ? (
-                    <>
+                <Button onClick={handleEmailSubmit} disabled={!email.trim() || isVerifying} variant="cta" className="w-full">
+                  {isVerifying ? <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Verifying...
-                    </>
-                  ) : (
-                    "Verify my account"
-                  )}
+                    </> : "Verify my account"}
                 </Button>
               </div>
             </div>
@@ -364,17 +333,13 @@ const Index = () => {
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">take your chance</span>
               </div>
-              <p className="body-regular">
-                Congratulations! You're eligible to spin our lottery wheel
-              </p>
+              <p className="body-regular">You're eligible to spin our lottery jogwheel</p>
               
               <LotteryWheel onComplete={handleLotteryComplete} isSpinning={isSpinning} result={wheelResult} />
               
-              {spinError && (
-                <div className="mt-4 p-2 bg-destructive/10 border border-destructive/20 rounded-lg">
+              {spinError && <div className="mt-4 p-2 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <p className="text-destructive text-sm font-grotesk">{spinError}</p>
-                </div>
-              )}
+                </div>}
             </div>
           </Card>}
 
@@ -385,40 +350,19 @@ const Index = () => {
           {currentStep > 1 && <Button onClick={goToPreviousStep} variant="secondary-cta" className="flex-1">
               Previous
             </Button>}
-          {!finalResult && (
-            <>
-              {currentStep < 5 && <Button 
-                  onClick={goToNextStep} 
-                  variant="cta" 
-                  className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
-                  disabled={(currentStep === 3 && !isVerified) || (currentStep === 4 && !isVerified)}
-                >
+          {!finalResult && <>
+              {currentStep < 5 && <Button onClick={goToNextStep} variant="cta" className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`} disabled={currentStep === 3 && !isVerified || currentStep === 4 && !isVerified}>
                   Next
                 </Button>}
-              {currentStep === 5 && !wheelResult && (
-                <Button 
-                  onClick={handleSpin} 
-                  disabled={isSpinning || isCheckingSpinEligibility} 
-                  variant="cta" 
-                  className="flex-1"
-                >
-                  {isCheckingSpinEligibility ? (
-                    <>
+              {currentStep === 5 && !wheelResult && <Button onClick={handleSpin} disabled={isSpinning || isCheckingSpinEligibility} variant="cta" className="flex-1">
+                  {isCheckingSpinEligibility ? <>
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
                       Checking...
-                    </>
-                  ) : isSpinning ? (
-                    'Spinning...'
-                  ) : (
-                    'Spin the Wheel!'
-                  )}
-                </Button>
-              )}
-            </>
-          )}
+                    </> : isSpinning ? 'Spinning...' : 'Spin the Wheel!'}
+                </Button>}
+            </>}
         </div>
       </div>
     </div>;
 };
-
 export default Index;
