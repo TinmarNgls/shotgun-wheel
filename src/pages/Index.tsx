@@ -141,9 +141,7 @@ const Index = () => {
           <h1 className="text-4xl md:text-5xl font-monument font-black text-white">
             Win Amazing Prizes!
           </h1>
-          <p className="text-xl text-[#D4D4D8] max-w-lg mx-auto font-grotesk">
-            Complete these simple steps and spin our lottery wheel for a chance to win exclusive discounts and prizes!
-          </p>
+          <p className="text-xl text-[#D4D4D8] max-w-lg mx-auto font-grotesk">Complete these steps  for a chance to win a prize!</p>
         </div>
 
 
