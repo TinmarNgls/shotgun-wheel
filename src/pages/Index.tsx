@@ -8,6 +8,7 @@ import { AppStoreBadges } from '@/components/AppStoreBadges';
 import { LotteryWheel } from '@/components/LotteryWheel';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useVisitTracking } from '@/hooks/useVisitTracking';
 import shotgunLogo from '/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png';
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
 interface Step {
@@ -17,9 +18,8 @@ interface Step {
   status: StepStatus;
 }
 const Index = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  useVisitTracking(); // Track visits
   const [currentStep, setCurrentStep] = useState(1);
   const [email, setEmail] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
