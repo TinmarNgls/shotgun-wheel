@@ -252,7 +252,7 @@ const Index = () => {
 
         {/* Step 1: Download */}
         {currentStep === 1 && <Card className="step-card active">
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-6 py-10">
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">Download Shotgun App</span>
               </div>
