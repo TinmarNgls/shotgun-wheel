@@ -180,7 +180,20 @@ const Index = () => {
       setTimeout(() => {
         let displayResult = '';
         if (data.result === 'win') {
-          displayResult = `🎉 Winner! Code: ${data.winning_code}`;
+          let codeText = `🎉 Winner! Code: ${data.winning_code}`;
+          
+          // Add amount, currency, and expiration if available
+          if (data.code_details) {
+            const { amount, currency, expiration_date } = data.code_details;
+            if (amount && currency) {
+              codeText += ` | ${amount} ${currency}`;
+            }
+            if (expiration_date) {
+              codeText += ` | ${expiration_date}`;
+            }
+          }
+          
+          displayResult = codeText;
         } else {
           displayResult = '🙃 Try Again';
         }

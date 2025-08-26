@@ -72,11 +72,17 @@ serve(async (req) => {
     }
 
     let winningCode = null
+    let codeDetails = null
 
     if (isWinner) {
-      // Get an available winning code
-      const { data: availableCode, error: codeError } = await supabase
-        .rpc('get_available_winning_code')
+      // Get an available winning code with its details
+      const { data: availableCodeData, error: codeError } = await supabase
+        .from('winning_codes')
+        .select('code, amount, currency, expiration_date')
+        .is('shotguner_id', null)
+        .order('id')
+        .limit(1)
+        .maybeSingle()
 
       if (codeError) {
         console.error('Error getting available code:', codeError)
@@ -86,12 +92,17 @@ serve(async (req) => {
         )
       }
 
-      if (!availableCode) {
+      if (!availableCodeData) {
         console.log('No winning codes available, treating as loss')
         isWinner = false
       } else {
-        winningCode = availableCode
-        console.log(`Assigned winning code: ${winningCode}`)
+        winningCode = availableCodeData.code
+        codeDetails = {
+          amount: availableCodeData.amount,
+          currency: availableCodeData.currency,
+          expiration_date: availableCodeData.expiration_date
+        }
+        console.log(`Assigned winning code: ${winningCode} with details:`, codeDetails)
 
         // Assign the winning code to the user
         const { data: assignSuccess, error: assignError } = await supabase
@@ -137,7 +148,8 @@ serve(async (req) => {
       message: isWinner 
         ? `Congratulations! You won! Your winning code is: ${winningCode}`
         : 'Sorry, you didn\'t win this time. Better luck next time!',
-      winning_code: winningCode
+      winning_code: winningCode,
+      code_details: codeDetails
     }
 
     return new Response(
