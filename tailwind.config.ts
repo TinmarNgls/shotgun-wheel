@@ -86,6 +86,7 @@ export default {
 			},
 			fontFamily: {
 				'monument': ['PP Monument Extended', 'Inter', 'sans-serif'],
+				'grotesk': ['Space Grotesk', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {
