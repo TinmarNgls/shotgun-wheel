@@ -148,6 +148,16 @@ const Index = () => {
                 First, download the Shotgun app from your device's app store
               </p>
               <AppStoreBadges onDownload={handleDownload} />
+              
+              <div className="pt-4 border-t border-border/50">
+                <Button 
+                  onClick={handleDownload}
+                  variant="outline" 
+                  className="w-full"
+                >
+                  I Already Have the App
+                </Button>
+              </div>
             </div>
           </Card>}
 
