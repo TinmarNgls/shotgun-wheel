@@ -237,7 +237,7 @@ const Index = () => {
       }
     }
   };
-  return <div className="min-h-screen py-8 px-4 relative">
+  return <div className="min-h-screen py-8 px-4 pb-24 relative">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="max-w-2xl mx-auto space-y-8 relative z-10">
@@ -344,9 +344,11 @@ const Index = () => {
           </Card>}
 
         {/* Error Display - Removed */}
+      </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between gap-4">
+      {/* Sticky Navigation Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border p-4 z-50">
+        <div className="max-w-2xl mx-auto flex justify-between gap-4">
           {currentStep > 1 && <Button onClick={goToPreviousStep} variant="secondary-cta" className="flex-1">
               Previous
             </Button>}
