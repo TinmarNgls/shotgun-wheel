@@ -22,6 +22,7 @@ const Index = () => {
   const [finalResult, setFinalResult] = useState<string | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [wheelResult, setWheelResult] = useState<string | null>(null);
+  const [isVerified, setIsVerified] = useState(false);
   const [steps, setSteps] = useState<Step[]>([{
     id: 1,
     title: 'Download Shotgun',
@@ -82,17 +83,18 @@ const Index = () => {
           email: email.trim()
         })
       });
-      if (response.ok) {
+      
+      const responseText = await response.text();
+      
+      if (responseText === 'OK') {
+        setIsVerified(true);
         updateStepStatus(4, 'completed');
         setCurrentStep(5);
         updateStepStatus(5, 'active');
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.message || "We couldn't verify your account. Please make sure you've followed Shotgun and enabled notifications.";
-        setVerificationError(errorMessage);
+        setIsVerified(false);
+        setVerificationError(responseText || "We couldn't verify your account. Please make sure you've followed Shotgun and enabled notifications.");
         updateStepStatus(4, 'error');
-        setCurrentStep(2); // Go back to follow step
-        updateStepStatus(2, 'active');
       }
     } catch (error) {
       setVerificationError('Something went wrong. Please try again.');
@@ -305,7 +307,12 @@ const Index = () => {
             {currentStep > 1 && <Button onClick={goToPreviousStep} variant="secondary-cta" className="flex-1">
                 Previous
               </Button>}
-            {currentStep < 5 && <Button onClick={goToNextStep} variant="cta" className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}>
+            {currentStep < 5 && <Button 
+                onClick={goToNextStep} 
+                variant="cta" 
+                className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
+                disabled={currentStep === 4 && !isVerified}
+              >
                 Next
               </Button>}
             {currentStep === 5 && !wheelResult && (
