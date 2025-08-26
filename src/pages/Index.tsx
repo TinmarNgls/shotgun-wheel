@@ -187,7 +187,7 @@ const Index = () => {
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">Submit Your Email</span>
               </div>
-              <p className="text-muted-foreground">
+              <p className="body-regular">
                 Enter the email address associated with your Shotgun account
               </p>
               
