@@ -161,7 +161,6 @@ const Index = () => {
         {currentStep === 2 && <Card className="step-card active">
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <Target className="w-8 h-8 text-secondary" />
                 <span>Follow & Enable Notifications</span>
               </div>
               <p className="text-muted-foreground mb-4">
