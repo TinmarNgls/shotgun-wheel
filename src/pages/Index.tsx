@@ -151,11 +151,30 @@ const Index = () => {
         }
       });
 
+      // Handle the case where the function returns an error (like already_spun)
       if (error) {
-        throw error;
+        console.log('Function error details:', error);
+        
+        // Try to parse the error context for the actual response
+        let errorData = null;
+        try {
+          if (error.context && error.context.body) {
+            errorData = JSON.parse(error.context.body);
+          }
+        } catch (e) {
+          console.log('Could not parse error context');
+        }
+        
+        if (errorData && errorData.error === 'already_spun') {
+          setSpinError('You have already spun the wheel. Only one spin per user is allowed.');
+        } else {
+          setSpinError('Something went wrong. Please try again.');
+        }
+        setIsCheckingSpinEligibility(false);
+        return;
       }
 
-      if (data.error) {
+      if (data && data.error) {
         if (data.error === 'already_spun') {
           setSpinError('You have already spun the wheel. Only one spin per user is allowed.');
         } else {
