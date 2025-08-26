@@ -257,14 +257,6 @@ const Index = () => {
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="max-w-2xl mx-auto space-y-8 relative z-10">
-        {/* TEST: LotteryWheel at top to check visibility theory */}
-        <Card className="step-card active">
-          <div className="text-center space-y-6">
-            <h2 className="heading-3">TEST: Lottie Animation Visibility Check</h2>
-            <LotteryWheel onComplete={handleLotteryComplete} isSpinning={isSpinning} result={wheelResult} />
-          </div>
-        </Card>
-
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
