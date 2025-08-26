@@ -160,6 +160,24 @@
     line-height: normal;
     text-transform: uppercase;
   }
+  
+  .subtitle {
+    color: #FFFFFF;
+    font-family: "Space Grotesk";
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+  }
+  
+  .body-regular {
+    color: #FFFFFF;
+    font-family: "Space Grotesk";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
 
   /* Custom Component Styles */
   .hero-gradient {
