@@ -20,6 +20,8 @@ const Index = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationError, setVerificationError] = useState('');
   const [finalResult, setFinalResult] = useState<string | null>(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [wheelResult, setWheelResult] = useState<string | null>(null);
   const [steps, setSteps] = useState<Step[]>([{
     id: 1,
     title: 'Download Shotgun',
@@ -101,7 +103,29 @@ const Index = () => {
   };
   const handleLotteryComplete = (result: string) => {
     setFinalResult(result);
+    setWheelResult(result);
+    setIsSpinning(false);
     updateStepStatus(5, 'completed');
+  };
+  
+  const handleSpin = () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+    
+    // Simulate spinning logic here or call the wheel's spin function
+    const prizes = [
+      "🎉 15% Discount!",
+      "🎫 Free Event Ticket", 
+      "🎵 VIP Access",
+      "🙃 Try Again",
+      "🎁 Mystery Prize",
+      "🎊 20% Discount!"
+    ];
+    
+    setTimeout(() => {
+      const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+      handleLotteryComplete(randomPrize);
+    }, 3000);
   };
   const resetProcess = () => {
     setCurrentStep(1);
@@ -247,7 +271,7 @@ const Index = () => {
                 Congratulations! You're eligible to spin our lottery wheel
               </p>
               
-              <LotteryWheel onComplete={handleLotteryComplete} />
+              <LotteryWheel onComplete={handleLotteryComplete} isSpinning={isSpinning} result={wheelResult} />
             </div>
           </Card>}
 
@@ -284,6 +308,11 @@ const Index = () => {
             {currentStep < 5 && <Button onClick={goToNextStep} variant="cta" className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}>
                 Next
               </Button>}
+            {currentStep === 5 && !wheelResult && (
+              <Button onClick={handleSpin} disabled={isSpinning} variant="cta" className="flex-1">
+                {isSpinning ? 'Spinning...' : 'Spin the Wheel!'}
+              </Button>
+            )}
           </div>}
       </div>
     </div>;

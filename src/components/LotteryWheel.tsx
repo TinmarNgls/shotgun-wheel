@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 
 interface LotteryWheelProps {
   onComplete: (result: string) => void;
+  onSpin?: () => void;
+  isSpinning?: boolean;
+  result?: string | null;
 }
 
 const prizes = [
@@ -14,16 +17,25 @@ const prizes = [
   { text: "🎊 20% Discount!", value: "20% voucher", color: "text-accent" },
 ];
 
-export const LotteryWheel = ({ onComplete }: LotteryWheelProps) => {
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinning, result: externalResult }: LotteryWheelProps) => {
+  const [internalIsSpinning, setInternalIsSpinning] = useState(false);
+  const [internalResult, setInternalResult] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
+  
+  // Use external state if provided, otherwise use internal state
+  const isSpinning = externalIsSpinning !== undefined ? externalIsSpinning : internalIsSpinning;
+  const result = externalResult !== undefined ? externalResult : internalResult;
 
   const spinWheel = () => {
     if (isSpinning) return;
     
-    setIsSpinning(true);
-    setResult(null);
+    if (onSpin) {
+      onSpin();
+      return;
+    }
+    
+    setInternalIsSpinning(true);
+    setInternalResult(null);
     
     // Generate random number of rotations (3-6 full rotations + random angle)
     const spins = Math.floor(Math.random() * 3) + 3;
@@ -39,8 +51,8 @@ export const LotteryWheel = ({ onComplete }: LotteryWheelProps) => {
     const winningPrize = prizes[winningIndex];
     
     setTimeout(() => {
-      setIsSpinning(false);
-      setResult(winningPrize.text);
+      setInternalIsSpinning(false);
+      setInternalResult(winningPrize.text);
       onComplete(winningPrize.value);
     }, 3000);
   };
@@ -86,16 +98,7 @@ export const LotteryWheel = ({ onComplete }: LotteryWheelProps) => {
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-accent z-20"></div>
       </div>
       
-      {/* Spin Button */}
-      {!result && (
-        <Button 
-          onClick={spinWheel}
-          disabled={isSpinning}
-          variant="cta"
-        >
-          {isSpinning ? 'Spinning...' : 'Spin the Wheel!'}
-        </Button>
-      )}
+      {/* Spin Button removed - now handled by parent */}
       
       {/* Result Display */}
       {result && (
