@@ -2,41 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Shotgun App Promotional Landing Page Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Background & Surface Colors */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    /* Card & Surface Colors */
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 5% 15%;
+    --popover-foreground: 0 0% 98%;
+    
+    /* Brand Colors - Music/Nightlife Theme */
+    --primary: 280 100% 70%;  /* Vibrant Purple */
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 285 100% 75%;
+    
+    --secondary: 320 100% 70%;  /* Hot Pink */
+    --secondary-foreground: 0 0% 98%;
+    --secondary-glow: 325 100% 75%;
+    
+    /* UI Colors */
+    --muted: 240 5% 25%;
+    --muted-foreground: 240 5% 65%;
+    
+    --accent: 45 100% 70%;  /* Golden Yellow for highlights */
+    --accent-foreground: 240 10% 3.9%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --success: 120 100% 40%;
+    --success-foreground: 0 0% 98%;
+    
+    --border: 240 5% 25%;
+    --input: 240 5% 15%;
+    --ring: 280 100% 70%;
+    
+    /* Design System */
+    --radius: 1rem;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(240 5% 10%) 100%);
+    
+    /* Shadows & Effects */
+    --shadow-primary: 0 10px 40px -10px hsl(var(--primary) / 0.4);
+    --shadow-secondary: 0 10px 40px -10px hsl(var(--secondary) / 0.4);
+    --shadow-glow: 0 0 60px hsl(var(--primary-glow) / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +123,89 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-hero);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Custom Component Styles */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .step-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-6 transition-all duration-300 hover:bg-card/90 hover:scale-[1.02];
+    box-shadow: var(--shadow-primary);
+  }
+  
+  .step-card.active {
+    @apply border-primary bg-card;
+    box-shadow: var(--shadow-primary), var(--shadow-glow);
+  }
+  
+  .step-card.completed {
+    @apply border-success bg-success/10;
+  }
+  
+  .cta-button {
+    @apply bg-primary hover:bg-primary-glow text-primary-foreground font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-primary);
+  }
+  
+  .secondary-button {
+    @apply bg-secondary hover:bg-secondary-glow text-secondary-foreground font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
+    box-shadow: var(--shadow-secondary);
+  }
+}
+
+@layer utilities {
+  /* Animation Classes */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+  
+  .animate-bounce-in {
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes pulse-glow {
+    0% {
+      box-shadow: var(--shadow-primary);
+    }
+    100% {
+      box-shadow: var(--shadow-primary), var(--shadow-glow);
+    }
+  }
+  
+  @keyframes bounce-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
