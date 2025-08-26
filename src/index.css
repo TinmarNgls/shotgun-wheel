@@ -172,6 +172,7 @@
   
   .body-regular {
     color: #FFFFFF;
+    opacity: 0.9;
     font-family: "Space Grotesk";
     font-size: 16px;
     font-style: normal;
