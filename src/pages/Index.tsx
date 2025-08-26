@@ -360,38 +360,42 @@ const Index = () => {
         {/* Error Display - Removed */}
 
         {/* Navigation Buttons */}
-        {!finalResult && <div className="flex justify-between gap-4">
-            {currentStep > 1 && <Button onClick={goToPreviousStep} variant="secondary-cta" className="flex-1">
-                Previous
-              </Button>}
-            {currentStep < 5 && <Button 
-                onClick={goToNextStep} 
-                variant="cta" 
-                className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
-                disabled={(currentStep === 3 && !isVerified) || (currentStep === 4 && !isVerified)}
-              >
-                Next
-              </Button>}
-            {currentStep === 5 && !wheelResult && (
-              <Button 
-                onClick={handleSpin} 
-                disabled={isSpinning || isCheckingSpinEligibility} 
-                variant="cta" 
-                className="flex-1"
-              >
-                {isCheckingSpinEligibility ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    Checking...
-                  </>
-                ) : isSpinning ? (
-                  'Spinning...'
-                ) : (
-                  'Spin the Wheel!'
-                )}
-              </Button>
-            )}
-          </div>}
+        <div className="flex justify-between gap-4">
+          {currentStep > 1 && <Button onClick={goToPreviousStep} variant="secondary-cta" className="flex-1">
+              Previous
+            </Button>}
+          {!finalResult && (
+            <>
+              {currentStep < 5 && <Button 
+                  onClick={goToNextStep} 
+                  variant="cta" 
+                  className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
+                  disabled={(currentStep === 3 && !isVerified) || (currentStep === 4 && !isVerified)}
+                >
+                  Next
+                </Button>}
+              {currentStep === 5 && !wheelResult && (
+                <Button 
+                  onClick={handleSpin} 
+                  disabled={isSpinning || isCheckingSpinEligibility} 
+                  variant="cta" 
+                  className="flex-1"
+                >
+                  {isCheckingSpinEligibility ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Checking...
+                    </>
+                  ) : isSpinning ? (
+                    'Spinning...'
+                  ) : (
+                    'Spin the Wheel!'
+                  )}
+                </Button>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>;
 };
