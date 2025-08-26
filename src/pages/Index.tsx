@@ -261,7 +261,7 @@ const Index = () => {
                   <p className="text-destructive font-medium font-grotesk">
                     {verificationError}
                   </p>
-                  <Button onClick={() => setCurrentStep(2)} variant="cta">
+                  <Button onClick={() => setCurrentStep(3)} variant="cta">
                     Try Again
                   </Button>
                 </div> : null}
