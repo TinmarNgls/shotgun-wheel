@@ -58,7 +58,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       setInternalIsSpinning(false);
       setInternalResult(winningPrize.text);
       onComplete(winningPrize.value);
-    }, 4000);
+    }, 3000);
   };
 
   return (
@@ -69,8 +69,8 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           className="w-full h-full transition-transform ease-out"
           style={{ 
             transform: `rotate(${rotation}deg)`,
-            transitionDuration: isSpinning ? '4000ms' : '300ms',
-            transitionTimingFunction: isSpinning ? 'cubic-bezier(0.23, 1, 0.32, 1)' : 'ease-out'
+            transitionDuration: isSpinning ? '3000ms' : '300ms',
+            transitionTimingFunction: isSpinning ? 'ease-in-out' : 'ease-out'
           }}
         >
           <img 
