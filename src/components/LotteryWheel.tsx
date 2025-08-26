@@ -122,9 +122,10 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
               </p>
               <div className="flex items-center justify-center gap-3 mt-6">
                 <div 
-                  className="px-6 py-3 rounded-lg text-white font-bold text-lg tracking-wider"
+                  className="px-6 py-3 rounded-lg font-bold text-lg tracking-wider"
                   style={{
-                    background: 'linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)'
+                    background: 'linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)',
+                    color: '#1B1B1B'
                   }}
                 >
                   {result.split("Code: ")[1]}
@@ -142,7 +143,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                     });
                     setTimeout(() => setCopied(false), 2000);
                   }}
-                  className="h-12 w-12 p-0"
+                  className="h-12 w-12 p-0 hover:bg-[#323232] hover:text-white border-border"
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>
