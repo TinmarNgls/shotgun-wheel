@@ -52,25 +52,14 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   }, [result]);
 
   const spinLottieWheel = () => {
-    console.log("🎯 spinLottieWheel called", { 
-      playerExists: !!playerRef.current, 
-      isSpinning, 
-      isPlayerReady 
-    });
-    
-    if (!playerRef.current || isSpinning || !isPlayerReady) {
-      console.log("❌ Can't spin - conditions not met");
+    if (!playerRef.current || !isPlayerReady) {
       return;
     }
-
-    console.log("✅ Starting spin animation");
-    setInternalIsSpinning(true);
     
     // Stop first, then play the Lottie animation
     try {
       playerRef.current.stop();
       playerRef.current.play();
-      console.log("🎬 Animation play() called");
     } catch (error) {
       console.error("❌ Error playing animation:", error);
     }
@@ -79,7 +68,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     if (!onSpin) {
       // Generate a random prize after animation duration
       setTimeout(() => {
-        console.log("🎁 Generating random prize");
         const randomIndex = Math.floor(Math.random() * prizes.length);
         const winningPrize = prizes[randomIndex];
         
@@ -89,14 +77,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       }, 3000); // Approximate duration of Lottie animation
     }
   };
-
-  // Debug: Component mounting
-  console.log("🎯 LotteryWheel component rendering", { 
-    externalIsSpinning, 
-    externalResult, 
-    isSpinning, 
-    result 
-  });
 
   return (
     <div className="flex flex-col items-center space-y-8">
