@@ -167,15 +167,21 @@
     align-items: center;
     gap: 10px;
     border-radius: 4px;
-    background: #FFF;
-    color: hsl(var(--background));
-    font-weight: 600;
+    background: #FFFFFF;
+    color: #1B1B1B;
+    text-align: center;
+    font-family: "Space Grotesk";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .cta-button:hover {
     background: #F8F8F8;
-    transform: scale(1.02);
   }
   
   .secondary-button {
