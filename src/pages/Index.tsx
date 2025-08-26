@@ -162,7 +162,7 @@ const Index = () => {
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">Follow & Enable Notifications</span>
               </div>
-              <p className="text-muted-foreground mb-4">
+              <p className="body-regular mb-4">
                 From the app, follow Shotgun page and enable push & emails
               </p>
               
