@@ -360,7 +360,7 @@ const Index = () => {
               <LotteryWheel onComplete={handleLotteryComplete} isSpinning={isSpinning} result={wheelResult} />
               
               {spinError && (
-                <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <div className="mt-4 p-2 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <p className="text-destructive text-sm font-grotesk">{spinError}</p>
                 </div>
               )}
