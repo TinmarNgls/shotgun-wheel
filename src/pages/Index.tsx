@@ -361,7 +361,7 @@ const Index = () => {
               
               {spinError && (
                 <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <p className="text-destructive text-sm">{spinError}</p>
+                  <p className="text-destructive text-sm font-grotesk">{spinError}</p>
                 </div>
               )}
             </div>
