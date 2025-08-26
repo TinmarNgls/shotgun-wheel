@@ -101,9 +101,9 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       {/* Result Display */}
       {result && (
         <div ref={resultRef} className="text-center space-y-4 animate-bounce-in">
-          {result.includes("Try Again") ? (
+          {result.includes("Try Again") || result.includes("no prize") ? (
             <>
-              <div className="heading-3">You loose</div>
+              <div className="heading-3">You lose</div>
               <p className="body-regular">
                 Sorry, this is not your lucky day this time!
               </p>
@@ -139,18 +139,18 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
 
               const getCurrencySymbol = (currency: string) => {
                 switch (currency) {
-                  case 'EUR': return '€';
-                  case 'USD': return '$';
-                  case 'BRL': return 'R$';
-                  case 'GBP': return '£';
-                  case 'JPY': return '¥';
+                  case "EUR": return "€";
+                  case "USD": return "$";
+                  case "BRL": return "R$";
+                  case "GBP": return "£";
+                  case "JPY": return "¥";
                   default: return currency;
                 }
               };
 
               const formatAmount = (amount: number, currency: string) => {
                 const symbol = getCurrencySymbol(currency);
-                if (currency === 'JPY') {
+                if (currency === "JPY") {
                   return `${symbol}${Math.round(amount)}`;
                 }
                 return `${symbol}${amount.toFixed(2)}`;
@@ -159,7 +159,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
               const formatExpirationDate = (dateString: string) => {
                 try {
                   const date = new Date(dateString);
-                  return format(date, 'MMMM dd, yyyy');
+                  return format(date, "MMMM dd, yyyy");
                 } catch (e) {
                   return dateString;
                 }
@@ -169,14 +169,14 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                 <>
                   <div className="heading-3">YOU WIN 🎉</div>
                   <p className="body-regular">
-                    This is your lucky day! Here is your <span style={{ color: '#B7EBEF', fontWeight: 'bold' }}>{amount && currency ? formatAmount(amount, currency) : '€5.00'}</span> code, make sure to save it
+                    This is your lucky day! Here is your <span style={{ color: "#B7EBEF", fontWeight: "bold" }}>{amount && currency ? formatAmount(amount, currency) : "€5.00"}</span> code, make sure to save it
                   </p>
                   <div className="flex items-center justify-center gap-3 mt-6">
                     <div 
                       className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
                       style={{
-                        background: 'linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)',
-                        color: '#1B1B1B'
+                        background: "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
+                        color: "#1B1B1B"
                       }}
                     >
                       {code}
@@ -208,9 +208,9 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
             })()
           ) : (
             <>
-              <div className="heading-3">{result}</div>
+              <div className="heading-3">YOU WIN 🎉</div>
               <p className="body-regular">
-                Check your email for your prize details!
+                Congratulations! You won a prize!
               </p>
             </>
           )}
