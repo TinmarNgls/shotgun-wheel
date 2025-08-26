@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 interface LotteryWheelProps {
   onComplete: (result: string) => void;
@@ -20,21 +21,6 @@ const prizes = [
   { text: "20% Discount", value: "20% voucher", color: "text-accent" },
 ];
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'lottie-player': {
-        id?: string;
-        src?: string;
-        background?: string;
-        style?: React.CSSProperties;
-        autoplay?: string;
-        loop?: string;
-        ref?: React.RefObject<any>;
-      };
-    }
-  }
-}
 
 export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinning, result: externalResult }: LotteryWheelProps) => {
   const { toast } = useToast();
@@ -72,7 +58,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     setInternalIsSpinning(true);
     
     // Reset and play the Lottie animation
-    playerRef.current.stop();
     playerRef.current.play();
 
     // If no external handler, we need to handle result internally
@@ -101,37 +86,23 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   };
 
   // Handle Lottie animation complete event
-  useEffect(() => {
-    if (playerRef.current) {
-      const player = playerRef.current;
-      
-      const handleComplete = () => {
-        if (onSpin) {
-          // External handler will manage the result
-          setInternalIsSpinning(false);
-        }
-      };
-
-      player.addEventListener('complete', handleComplete);
-      
-      return () => {
-        player.removeEventListener('complete', handleComplete);
-      };
+  const handleLottieComplete = () => {
+    if (onSpin) {
+      // External handler will manage the result
+      setInternalIsSpinning(false);
     }
-  }, [onSpin]);
+  };
 
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative w-80 h-80">
         {/* Lottie Wheel */}
-        <lottie-player
+        <DotLottieReact
           ref={playerRef}
-          id="jogwheel"
           src="https://lottie.host/d8e0176d-8d74-46ed-b107-4f9a7b3d1ff5/6fhNis5qmi.lottie"
-          background="transparent"
+          loop={false}
+          autoplay={false}
           style={{ width: '100%', height: '100%' }}
-          autoplay="false"
-          loop="false"
         />
       </div>
       
