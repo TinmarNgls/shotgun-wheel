@@ -194,8 +194,20 @@ const Index = () => {
               
               <div className="space-y-4 max-w-sm mx-auto">
                 <Input type="email" placeholder="your-email@example.com" value={email} onChange={e => setEmail(e.target.value)} className="text-center bg-input border-border focus:border-primary" />
-                <Button onClick={handleEmailSubmit} disabled={!email.trim()} className="cta-button w-full">
-                  Verify my account
+                <Button 
+                  onClick={handleEmailSubmit} 
+                  disabled={!email.trim() || isVerifying} 
+                  variant="cta" 
+                  className="w-full"
+                >
+                  {isVerifying ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    "Verify my account"
+                  )}
                 </Button>
               </div>
             </div>
