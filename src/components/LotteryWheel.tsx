@@ -257,7 +257,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                     </Button>
                   </div>
                   {expirationDate && (
-                    <p className="body-small text-muted-foreground mt-4">
+                    <p className="body-regular text-muted-foreground mt-4">
                       Valid until {formatExpirationDate(expirationDate)}
                     </p>
                   )}
