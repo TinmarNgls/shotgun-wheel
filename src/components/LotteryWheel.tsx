@@ -54,6 +54,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const spinWheelWithCSS = () => {
     if (!wheelRef.current || isSpinning) return;
     
+    console.log('Starting CSS spin animation');
     setInternalIsSpinning(true);
     setInternalResult(null);
     
@@ -62,25 +63,32 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
+    console.log('Spin details:', { spins, randomAngle, totalRotation });
+    
     // Calculate winning prize based on final angle
     const finalAngle = totalRotation % 360;
     const sectionSize = 360 / prizes.length;
     const winningIndex = Math.floor(finalAngle / sectionSize);
     const winningPrize = prizes[winningIndex];
     
+    console.log('Winning prize calculated:', winningPrize);
+    
     // Remove any existing animation class and force reflow
     setAnimationClass('');
     if (wheelRef.current) {
       void wheelRef.current.offsetWidth; // Force reflow
+      console.log('Forced reflow, about to add animation class');
     }
     
     // Add the appropriate animation class based on number of spins
     const animationClasses = ['wheel-spinning', 'wheel-spinning-alt', 'wheel-spinning-extra'];
     const selectedClass = animationClasses[(spins - 7) % 3];
+    console.log('Adding animation class:', selectedClass);
     setAnimationClass(selectedClass);
     
     // Set final rotation and handle completion after animation
     setTimeout(() => {
+      console.log('Animation completed, setting final rotation');
       setRotation(totalRotation % 360);
       setInternalIsSpinning(false);
       setAnimationClass('');
@@ -88,9 +96,11 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       // Handle result based on whether there's an external handler
       if (onSpin) {
         // External handler will manage the result
+        console.log('External handler will manage result');
       } else {
         setInternalResult(winningPrize.text);
         onComplete(winningPrize.value);
+        console.log('Internal result set:', winningPrize.text);
       }
     }, 3500);
   };
@@ -115,12 +125,15 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           ref={wheelRef}
           src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
           alt="Jogwheel" 
-          className={`w-full h-full object-contain ${animationClass}`}
+          className={`w-full h-full object-contain transition-all duration-100 ${animationClass}`}
           style={{ 
             transform: animationClass ? 'none' : `rotate(${rotation}deg)`,
             transformOrigin: '50% 50%',
             willChange: 'transform',
             filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
+          }}
+          onAnimationEnd={() => {
+            console.log('CSS animation ended');
           }}
         />
         
