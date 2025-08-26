@@ -19,19 +19,25 @@ export type Database = {
           id: number
           shotguner_email: string
           shotguner_id: number
+          status: string
           wheel_spinned_at: string
+          winning_code: string | null
         }
         Insert: {
           id?: number
           shotguner_email: string
           shotguner_id: number
+          status?: string
           wheel_spinned_at?: string
+          winning_code?: string | null
         }
         Update: {
           id?: number
           shotguner_email?: string
           shotguner_id?: number
+          status?: string
           wheel_spinned_at?: string
+          winning_code?: string | null
         }
         Relationships: []
       }
