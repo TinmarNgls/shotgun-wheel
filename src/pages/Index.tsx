@@ -159,9 +159,7 @@ const Index = () => {
               </p>
               <AppStoreBadges onDownload={handleDownload} />
               
-              <div className="pt-4 border-t border-border/50">
-                
-              </div>
+              
             </div>
           </Card>}
 
