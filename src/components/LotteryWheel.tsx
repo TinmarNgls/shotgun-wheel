@@ -91,7 +91,8 @@ export const LotteryWheel = ({ onComplete }: LotteryWheelProps) => {
         <Button 
           onClick={spinWheel}
           disabled={isSpinning}
-          className="cta-button text-lg px-8 py-4"
+          variant="cta"
+          className="text-lg px-8 py-4"
         >
           {isSpinning ? 'Spinning...' : '🎯 Spin the Wheel!'}
         </Button>
