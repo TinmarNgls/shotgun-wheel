@@ -9,13 +9,16 @@ import { LotteryWheel } from '@/components/LotteryWheel';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import shotgunLogo from '/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png';
+
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
+
 interface Step {
   id: number;
   title: string;
   description: string;
   status: StepStatus;
 }
+
 const Index = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
@@ -55,22 +58,26 @@ const Index = () => {
     description: 'Win amazing prizes!',
     status: 'pending'
   }]);
+
   const updateStepStatus = (stepId: number, status: StepStatus) => {
     setSteps(prev => prev.map(step => step.id === stepId ? {
       ...step,
       status
     } : step));
   };
+
   const handleDownload = () => {
     updateStepStatus(1, 'completed');
     setCurrentStep(2);
     updateStepStatus(2, 'active');
   };
+
   const handleFollowComplete = () => {
     updateStepStatus(2, 'completed');
     setCurrentStep(3);
     updateStepStatus(3, 'active');
   };
+
   const handleEmailSubmit = async () => {
     if (!email.trim()) return;
     updateStepStatus(3, 'completed');
@@ -126,13 +133,14 @@ const Index = () => {
       setIsVerifying(false);
     }
   };
+
   const handleLotteryComplete = (result: string) => {
     setFinalResult(result);
     setWheelResult(result);
     setIsSpinning(false);
     updateStepStatus(5, 'completed');
   };
-  
+
   const handleSpin = async () => {
     if (isSpinning || isCheckingSpinEligibility) return;
     
@@ -198,6 +206,7 @@ const Index = () => {
       setIsCheckingSpinEligibility(false);
     }
   };
+
   const resetProcess = () => {
     setCurrentStep(1);
     setEmail('');
@@ -208,6 +217,7 @@ const Index = () => {
       status: index === 0 ? 'active' : 'pending'
     })));
   };
+
   const goToNextStep = () => {
     if (currentStep === 4 && !isVerified) {
       // If verification failed, go back to email step
@@ -220,18 +230,31 @@ const Index = () => {
       updateStepStatus(currentStep + 1, 'active');
     }
   };
+
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       // If on step 5 (wheel), go back to step 3 (email) to skip verification screen
       const targetStep = currentStep === 5 ? 3 : currentStep - 1;
       setCurrentStep(targetStep);
       updateStepStatus(targetStep, 'active');
+      
       // Clear any verification errors when going back
       if (verificationError) {
         setVerificationError('');
       }
+      
+      // Reset wheel-related states when going back from wheel step
+      if (currentStep === 5) {
+        setFinalResult(null);
+        setWheelResult(null);
+        setIsSpinning(false);
+        setSpinError('');
+        setIsVerified(false);
+        setShotgunerId(null);
+      }
     }
   };
+
   return <div className="min-h-screen py-8 px-4 relative">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
@@ -244,7 +267,6 @@ const Index = () => {
           <h1 className="heading-1">Spin the Jogwheel</h1>
           <p className="body-regular max-w-lg mx-auto px-6">Complete these steps  for a chance to win a prize!</p>
         </div>
-
 
         {/* Step 1: Download */}
         {currentStep === 1 && <Card className="step-card active">
@@ -359,7 +381,6 @@ const Index = () => {
             </div>
           </Card>}
 
-
         {/* Error Display - Removed */}
 
         {/* Navigation Buttons */}
@@ -402,4 +423,5 @@ const Index = () => {
       </div>
     </div>;
 };
+
 export default Index;
