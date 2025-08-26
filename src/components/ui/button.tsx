@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        cta: "inline-flex justify-center items-center gap-[10px] rounded-[4px] bg-white px-4 py-2 text-[#1B1B1B] text-center font-grotesk text-xs font-bold tracking-[0.5px] uppercase hover:bg-gray-50 transition-all",
+        cta: "cta-button",
         "secondary-cta": "inline-flex justify-center items-center gap-[10px] rounded-[4px] bg-[#323232] px-4 py-2 text-white text-center font-grotesk text-xs font-bold tracking-[0.5px] uppercase hover:bg-[#404040] transition-all",
       },
       size: {

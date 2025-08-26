@@ -94,7 +94,7 @@ export const LotteryWheel = ({ onComplete }: LotteryWheelProps) => {
           variant="cta"
           className="text-lg px-8 py-4"
         >
-          {isSpinning ? 'Spinning...' : '🎯 Spin the Wheel!'}
+          {isSpinning ? 'Spinning...' : 'Spin the Wheel!'}
         </Button>
       )}
       
