@@ -122,11 +122,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    background: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+    @apply text-foreground;
+    background: #151515;
     min-height: 100vh;
   }
 }

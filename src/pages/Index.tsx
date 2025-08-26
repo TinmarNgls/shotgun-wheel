@@ -6,7 +6,7 @@ import { Loader2, CheckCircle, XCircle, ExternalLink, Mail, Download, Target } f
 import { ProgressIndicator } from '@/components/ProgressIndicator';
 import { AppStoreBadges } from '@/components/AppStoreBadges';
 import { LotteryWheel } from '@/components/LotteryWheel';
-import shotgunLogo from '/lovable-uploads/f73cf581-d949-480b-9d60-76d7f8bc289d.png';
+import shotgunLogo from '/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png';
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
 interface Step {
   id: number;
