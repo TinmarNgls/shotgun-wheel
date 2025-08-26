@@ -35,12 +35,58 @@ export type Database = {
         }
         Relationships: []
       }
+      winning_codes: {
+        Row: {
+          assigned_at: string | null
+          code: string
+          created_at: string
+          id: number
+          shotguner_email: string | null
+          shotguner_id: number | null
+        }
+        Insert: {
+          assigned_at?: string | null
+          code: string
+          created_at?: string
+          id?: number
+          shotguner_email?: string | null
+          shotguner_id?: number | null
+        }
+        Update: {
+          assigned_at?: string | null
+          code?: string
+          created_at?: string
+          id?: number
+          shotguner_email?: string | null
+          shotguner_id?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      assign_winning_code: {
+        Args: {
+          p_code: string
+          p_shotguner_email: string
+          p_shotguner_id: number
+        }
+        Returns: boolean
+      }
+      generate_random_code: {
+        Args: { length?: number }
+        Returns: string
+      }
+      get_available_winning_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      user_has_winning_code: {
+        Args: { p_shotguner_id: number }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
