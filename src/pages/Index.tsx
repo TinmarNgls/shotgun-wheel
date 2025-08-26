@@ -152,7 +152,7 @@ const Index = () => {
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
                 
-                <span>Download Shotgun</span>
+                <span>Download Shotgun App</span>
               </div>
               <p className="text-muted-foreground">
                 First, download the Shotgun app from your device's app store
