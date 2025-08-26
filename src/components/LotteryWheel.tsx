@@ -217,11 +217,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                   <p className="body-regular">
                     This is your lucky day! Here is your {amount && currency ? formatAmount(amount, currency) : '5€'} code, make sure to save it
                   </p>
-                  {expirationDate && (
-                    <p className="body-small text-muted-foreground">
-                      Valid until {formatExpirationDate(expirationDate)}
-                    </p>
-                  )}
                   <div className="flex items-center justify-center gap-3 mt-6">
                     <div 
                       className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
@@ -249,6 +244,11 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
+                  {expirationDate && (
+                    <p className="body-small text-muted-foreground mt-4">
+                      Valid until {formatExpirationDate(expirationDate)}
+                    </p>
+                  )}
                 </>
               );
             })()
