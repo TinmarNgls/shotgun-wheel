@@ -242,7 +242,6 @@ const Index = () => {
         {currentStep === 4 && <Card className="step-card active">
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2">
-                <CheckCircle className="w-8 h-8 text-success" />
                 <span className="heading-3">Verifying Your Account</span>
               </div>
               
