@@ -52,11 +52,13 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   }, [result]);
 
   const spinWheelWithWebAPI = () => {
-    if (!wheelRef.current || isSpinning) return;
-    
+    console.log('🚀 spinWheelWithWebAPI called, wheelRef.current:', !!wheelRef.current, 'isSpinning:', isSpinning);
+    if (!wheelRef.current || isSpinning) {
+      console.log('❌ Early return - no ref or already spinning');
+      return;
+    }
     console.log('🎯 Starting Web Animations API spin');
     setInternalIsSpinning(true);
-    setInternalResult(null);
     
     // Stop any existing animation
     if (currentAnimation) {
@@ -79,26 +81,35 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     
     console.log('🏆 Winning prize calculated:', winningPrize);
     
+    // Check for Web Animations API support
+    if (!wheelRef.current.animate) {
+      console.error('❌ Web Animations API not supported');
+      setInternalIsSpinning(false);
+      return;
+    }
+    
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
     // Start the Web Animations API animation
-    const animation = wheelRef.current.animate(
-      [
-        { transform: `rotate(${rotation}deg)` },
-        { transform: `rotate(${rotation + totalRotation}deg)` }
-      ],
-      {
-        duration: prefersReducedMotion ? 100 : 3500,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'forwards'
-      }
-    );
+    console.log('🎬 Creating animation from', rotation, 'to', rotation + totalRotation);
+    try {
+      const animation = wheelRef.current.animate(
+        [
+          { transform: `rotate(${rotation}deg)` },
+          { transform: `rotate(${rotation + totalRotation}deg)` }
+        ],
+        {
+          duration: prefersReducedMotion ? 100 : 3500,
+          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          fill: 'forwards'
+        }
+      );
     
-    setCurrentAnimation(animation);
-    console.log('🎨 Web Animation started');
-    
-    // Handle animation completion
+      setCurrentAnimation(animation);
+      console.log('🎨 Web Animation started successfully');
+      
+      // Handle animation completion
     animation.finished.then(() => {
       console.log('✅ Web Animation completed');
       setRotation((rotation + totalRotation) % 360);
@@ -113,11 +124,15 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
         onComplete(winningPrize.value);
         console.log('🎊 Internal result set:', winningPrize.text);
       }
-    }).catch((error) => {
-      console.error('❌ Animation failed:', error);
+      }).catch((error) => {
+        console.error('❌ Animation failed:', error);
+        setInternalIsSpinning(false);
+        setCurrentAnimation(null);
+      });
+    } catch (error) {
+      console.error('❌ Failed to create animation:', error);
       setInternalIsSpinning(false);
-      setCurrentAnimation(null);
-    });
+    }
   };
 
   const spinWheel = () => {
@@ -138,11 +153,11 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
         {/* Wheel Container */}
         <img 
           ref={wheelRef}
-          src="/lovable-uploads/f73cf581-d949-480b-9d60-76d7f8bc289d.png" 
+          src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
           alt="Jogwheel" 
           className="w-full h-full object-contain"
           style={{ 
-            transform: `rotate(${rotation}deg)`,
+            transform: currentAnimation ? undefined : `rotate(${rotation}deg)`,
             transformOrigin: 'center center',
             willChange: 'transform',
             filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
