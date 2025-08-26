@@ -346,9 +346,6 @@ const Index = () => {
               
               {isVerifying ? <div className="space-y-4">
                   <Loader2 className="w-12 h-12 animate-spin mx-auto text-primary" />
-                  <p className="text-muted-foreground">
-                    Checking your account status...
-                  </p>
                 </div> : verificationError ? <div className="space-y-4">
                   <XCircle className="w-12 h-12 mx-auto text-destructive" />
                   <p className="text-destructive font-medium font-grotesk">
