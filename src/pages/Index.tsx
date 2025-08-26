@@ -291,15 +291,7 @@ const Index = () => {
             </div>
           </Card>}
 
-        {/* Error Display */}
-        {verificationError && currentStep !== 4 && <Card className="border-destructive bg-destructive/10">
-            <div className="text-center space-y-4">
-              <XCircle className="w-8 h-8 mx-auto text-destructive" />
-              <p className="text-destructive font-medium">
-                {verificationError}
-              </p>
-            </div>
-          </Card>}
+        {/* Error Display - Removed */}
 
         {/* Navigation Buttons */}
         {!finalResult && <div className="flex justify-between gap-4">
