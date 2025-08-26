@@ -241,7 +241,7 @@ const Index = () => {
         {currentStep === 5 && <Card className="step-card active">
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2">
-                <span className="heading-3">Spin the Wheel!</span>
+                <span className="heading-3">take your chance</span>
               </div>
               <p className="text-muted-foreground">
                 Congratulations! You're eligible to spin our lottery wheel
