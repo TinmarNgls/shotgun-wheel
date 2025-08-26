@@ -142,49 +142,6 @@ const Index = () => {
     setSpinError('');
 
     try {
-      // First check rate limit using session fingerprinting (same as visit tracking)
-      const generateSessionId = (): string => {
-        const stored = localStorage.getItem('shotgun_session_id');
-        if (stored) {
-          return stored;
-        }
-        
-        // Create fingerprint from browser characteristics
-        const fingerprint = [
-          navigator.userAgent,
-          navigator.language,
-          screen.width + 'x' + screen.height,
-          new Date().getTimezoneOffset(),
-          Math.random().toString(36).substring(2)
-        ].join('|');
-        
-        const sessionId = btoa(fingerprint).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32);
-        localStorage.setItem('shotgun_session_id', sessionId);
-        return sessionId;
-      };
-
-      const sessionId = generateSessionId();
-      
-      // Check rate limit
-      const { data: rateLimitData, error: rateLimitError } = await supabase.functions.invoke('check-spin-rate-limit', {
-        body: { session_id: sessionId }
-      });
-
-      if (rateLimitError) {
-        console.error('Rate limit check error:', rateLimitError);
-        setSpinError('Unable to verify rate limit. Please try again.');
-        setIsCheckingSpinEligibility(false);
-        return;
-      }
-
-      if (rateLimitData?.rateLimited) {
-        setSpinError(rateLimitData.message);
-        setIsCheckingSpinEligibility(false);
-        return;
-      }
-
-      console.log(`Rate limit check passed. Attempts remaining: ${rateLimitData?.attemptsRemaining || 'unknown'}`);
-    
       // Call our backend spin function
       const {
         data,
@@ -246,8 +203,8 @@ const Index = () => {
       }, 3000);
       
     } catch (error) {
-      console.error('Error during spin process:', error);
-      setSpinError('Unable to process request. Please try again.');
+      console.error('Network error spinning wheel:', error);
+      setSpinError('Network error. Please check your connection and try again.');
       setIsCheckingSpinEligibility(false);
     }
   };
