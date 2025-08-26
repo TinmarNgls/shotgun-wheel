@@ -215,7 +215,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
                 <>
                   <div className="heading-3">YOU WIN 🎉</div>
                   <p className="body-regular">
-                    This is your lucky day! Here is your {amount && currency ? formatAmount(amount, currency) : '5€'} code, make sure to save it
+                    This is your lucky day! Here is your <span style={{ color: '#B7EBEF', fontWeight: 'bold' }}>{amount && currency ? formatAmount(amount, currency) : '€5.00'}</span> code, make sure to save it
                   </p>
                   <div className="flex items-center justify-center gap-3 mt-6">
                     <div 
