@@ -51,7 +51,7 @@ serve(async (req) => {
           error: 'already_spun',
           message: 'You have already spun the wheel. Only one spin per user is allowed.'
         }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 

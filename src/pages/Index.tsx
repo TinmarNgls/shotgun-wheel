@@ -154,17 +154,10 @@ const Index = () => {
       console.log('Spin response - data:', data);
       console.log('Spin response - error:', error);
 
-      // If there's an error response, it might still contain valid data in a 400 response
+      // Handle network/connection errors
       if (error) {
-        console.log('Full error object:', JSON.stringify(error, null, 2));
-        
-        // The edge function returns 400 status with proper JSON for business logic errors
-        // Check if we have a proper error message in the error object
-        if (error.message) {
-          setSpinError(error.message);
-        } else {
-          setSpinError('Something went wrong. Please try again.');
-        }
+        console.log('Network error:', JSON.stringify(error, null, 2));
+        setSpinError('Network error. Please check your connection and try again.');
         setIsCheckingSpinEligibility(false);
         return;
       }
