@@ -29,6 +29,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
   const wheelRef = useRef<HTMLImageElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   
   // Use external state if provided, otherwise use internal state
   const isSpinning = externalIsSpinning !== undefined ? externalIsSpinning : internalIsSpinning;
@@ -76,6 +77,11 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           setInternalResult(winningPrize.text);
           onComplete(winningPrize.value);
         }
+        
+        // Scroll to result after a short delay
+        setTimeout(() => {
+          resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
       }
     });
   };
@@ -116,7 +122,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       
       {/* Result Display */}
       {result && (
-        <div className="text-center space-y-4 animate-bounce-in">
+        <div ref={resultRef} className="text-center space-y-4 animate-bounce-in">
           {result.includes("Try Again") ? (
             <>
               <div className="heading-3">You loose</div>
