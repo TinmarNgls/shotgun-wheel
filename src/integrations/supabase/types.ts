@@ -43,25 +43,34 @@ export type Database = {
       }
       winning_codes: {
         Row: {
+          amount: number | null
           assigned_at: string | null
           code: string
           created_at: string
+          currency: string | null
+          expiration_date: string | null
           id: number
           shotguner_email: string | null
           shotguner_id: number | null
         }
         Insert: {
+          amount?: number | null
           assigned_at?: string | null
           code: string
           created_at?: string
+          currency?: string | null
+          expiration_date?: string | null
           id?: number
           shotguner_email?: string | null
           shotguner_id?: number | null
         }
         Update: {
+          amount?: number | null
           assigned_at?: string | null
           code?: string
           created_at?: string
+          currency?: string | null
+          expiration_date?: string | null
           id?: number
           shotguner_email?: string | null
           shotguner_id?: number | null
