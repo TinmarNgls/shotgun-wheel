@@ -311,7 +311,7 @@ const Index = () => {
                 onClick={goToNextStep} 
                 variant="cta" 
                 className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
-                disabled={currentStep === 4 && !isVerified}
+                disabled={(currentStep === 3 && !isVerified) || (currentStep === 4 && !isVerified)}
               >
                 Next
               </Button>}
