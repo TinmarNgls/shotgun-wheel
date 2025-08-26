@@ -229,7 +229,7 @@ const Index = () => {
             <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
           </div>
           <h1 className="heading-1">Spin the Jogwheel</h1>
-          <p className="body-regular max-w-lg mx-auto">Complete these steps  for a chance to win a prize!</p>
+          <p className="body-regular max-w-lg mx-auto px-6">Complete these steps  for a chance to win a prize!</p>
         </div>
 
 
