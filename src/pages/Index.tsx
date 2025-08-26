@@ -168,10 +168,16 @@ const Index = () => {
                 Open the Shotgun app, follow our official page, and enable email + push notifications
               </p>
               
-              <a href="https://shotgun.live/en/venues/shotgun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-2 secondary-button">
-                <ExternalLink className="w-5 h-5" />
-                <span>Go to Shotgun Page</span>
-              </a>
+              <Button 
+                asChild 
+                variant="cta"
+                className="inline-flex items-center space-x-2"
+              >
+                <a href="https://shotgun.live/en/venues/shotgun" target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="w-5 h-5" />
+                  <span>Go to Shotgun Page</span>
+                </a>
+              </Button>
               
               
             </div>
