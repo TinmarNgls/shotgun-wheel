@@ -56,6 +56,17 @@
     --shadow-secondary: 0 10px 40px -10px hsl(var(--secondary) / 0.4);
     --shadow-glow: 0 0 60px hsl(var(--primary-glow) / 0.3);
     
+    /* Typography */
+    --text-white: 0 0% 100%;
+    
+    /* Typography Sizes & Spacing */
+    --heading-1-size: 24px;
+    --heading-1-line-height: 30px;
+    --heading-3-size: 14px;
+    --heading-3-line-height: 17px;
+    --body-regular-size: 16px;
+    --body-regular-line-height: 24px;
+
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -129,6 +140,31 @@
 }
 
 @layer components {
+  /* Typography Components */
+  .heading-1 {
+    color: hsl(var(--text-white));
+    font-family: 'PP Monument Extended', 'Inter', sans-serif;
+    font-size: var(--heading-1-size);
+    line-height: var(--heading-1-line-height);
+    font-weight: 400;
+  }
+  
+  .heading-3 {
+    color: hsl(var(--text-white));
+    font-family: 'PP Monument Extended', 'Inter', sans-serif;
+    font-size: var(--heading-3-size);
+    line-height: var(--heading-3-line-height);
+    font-weight: 400;
+  }
+  
+  .body-regular {
+    color: hsl(var(--text-white));
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: var(--body-regular-size);
+    line-height: var(--body-regular-line-height);
+    font-weight: 500;
+  }
+
   /* Custom Component Styles */
   .hero-gradient {
     background: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');

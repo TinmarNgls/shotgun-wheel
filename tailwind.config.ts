@@ -88,6 +88,11 @@ export default {
 				'monument': ['PP Monument Extended', 'Inter', 'sans-serif'],
 				'grotesk': ['Space Grotesk', 'sans-serif'],
 			},
+			fontSize: {
+				'heading-1': ['var(--heading-1-size)', { lineHeight: 'var(--heading-1-line-height)' }],
+				'heading-3': ['var(--heading-3-size)', { lineHeight: 'var(--heading-3-line-height)' }],
+				'body-regular': ['var(--body-regular-size)', { lineHeight: 'var(--body-regular-line-height)' }],
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
