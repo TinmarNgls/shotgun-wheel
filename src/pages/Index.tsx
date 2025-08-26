@@ -136,7 +136,7 @@ const Index = () => {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
-            <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow bg-white p-2" />
+            <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Win Amazing Prizes!
