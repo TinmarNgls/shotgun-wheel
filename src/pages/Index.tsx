@@ -6,7 +6,7 @@ import { Loader2, CheckCircle, XCircle, ExternalLink, Mail, Download, Target } f
 import { ProgressIndicator } from '@/components/ProgressIndicator';
 import { AppStoreBadges } from '@/components/AppStoreBadges';
 import { LotteryWheel } from '@/components/LotteryWheel';
-import shotgunLogo from '/lovable-uploads/f73cf581-d949-480b-9d60-76d7f8bc289d.png';
+import shotgunLogo from '/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png';
 type StepStatus = 'pending' | 'active' | 'completed' | 'error';
 interface Step {
   id: number;
@@ -136,12 +136,12 @@ const Index = () => {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
-            <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow bg-white p-2" />
+            <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-monument font-black text-white">
             Win Amazing Prizes!
           </h1>
-          <p className="text-muted-foreground max-w-lg mx-auto text-base">
+          <p className="text-xl text-[#D4D4D8] max-w-lg mx-auto">
             Complete these simple steps and spin our lottery wheel for a chance to win exclusive discounts and prizes!
           </p>
         </div>
