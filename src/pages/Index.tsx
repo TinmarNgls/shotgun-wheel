@@ -114,6 +114,24 @@ const Index = () => {
       status: index === 0 ? 'active' : 'pending'
     })));
   };
+
+  const goToNextStep = () => {
+    if (currentStep < 5 && !finalResult) {
+      setCurrentStep(currentStep + 1);
+      updateStepStatus(currentStep + 1, 'active');
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      updateStepStatus(currentStep - 1, 'active');
+      // Clear any verification errors when going back
+      if (verificationError) {
+        setVerificationError('');
+      }
+    }
+  };
   return <div className="min-h-screen py-8 px-4 relative">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
@@ -131,8 +149,6 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Progress Indicator */}
-        <ProgressIndicator currentStep={currentStep} totalSteps={5} />
 
         {/* Step 1: Download */}
         {currentStep === 1 && <Card className="step-card active">
@@ -266,6 +282,29 @@ const Index = () => {
               </p>
             </div>
           </Card>}
+
+        {/* Navigation Buttons */}
+        {!finalResult && (
+          <div className="flex justify-between gap-4">
+            {currentStep > 1 && (
+              <Button 
+                onClick={goToPreviousStep} 
+                variant="outline"
+                className="flex-1"
+              >
+                Previous
+              </Button>
+            )}
+            {currentStep < 5 && (
+              <Button 
+                onClick={goToNextStep} 
+                className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}
+              >
+                Next
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>;
 };
