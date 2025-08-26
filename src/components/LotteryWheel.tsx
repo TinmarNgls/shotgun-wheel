@@ -42,6 +42,15 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   }, [externalIsSpinning]);
 
+  // Effect to scroll to result when it appears
+  useEffect(() => {
+    if (result) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 500);
+    }
+  }, [result]);
+
   const spinWheelWithAnime = () => {
     if (!wheelRef.current || isSpinning) return;
     
@@ -77,11 +86,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           setInternalResult(winningPrize.text);
           onComplete(winningPrize.value);
         }
-        
-        // Scroll to result after a short delay
-        setTimeout(() => {
-          resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 500);
       }
     });
   };
