@@ -179,11 +179,7 @@ const Index = () => {
                 <span>Go to Shotgun Page</span>
               </a>
               
-              <div className="mt-6">
-                <Button onClick={handleFollowComplete} className="cta-button">
-                  ✓ I've Followed & Enabled Notifications
-                </Button>
-              </div>
+              
             </div>
           </Card>}
 
