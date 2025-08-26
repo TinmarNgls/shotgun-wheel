@@ -242,12 +242,12 @@ const Index = () => {
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="max-w-2xl mx-auto space-y-8 relative z-10">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center mb-6">
-            <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <img src={shotgunLogo} alt="Shotgun App" className="w-16 h-16 rounded-xl shadow-glow" />
+            <h1 className="heading-1">Shotgun Lucky Jogwheel</h1>
           </div>
-          <h1 className="heading-1">Spin the Jogwheel</h1>
-          <p className="body-regular max-w-lg mx-auto px-6">Complete these steps  for a chance to win a prize!</p>
+          <p className="body-regular max-w-lg mx-auto px-6 text-center">Complete these steps for a chance to win a prize!</p>
         </div>
 
         {/* Step 1: Download */}
