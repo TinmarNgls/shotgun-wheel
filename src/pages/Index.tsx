@@ -250,6 +250,32 @@ const Index = () => {
           <p className="body-regular max-w-lg mx-auto px-6">Complete these steps  for a chance to win a prize!</p>
         </div>
 
+        {/* 4-Step Progress Stepper */}
+        <div className="flex justify-center items-center space-x-3 mb-8">
+          {[1, 2, 3, 4].map((step) => {
+            const stepMapping = {
+              1: 1, // Download
+              2: 2, // Follow
+              3: Math.max(3, 4), // Email/Verification combined
+              4: 5, // Spin
+            };
+            const mappedStep = stepMapping[step as keyof typeof stepMapping];
+            const isCompleted = currentStep > mappedStep;
+            const isActive = currentStep === mappedStep || (step === 3 && (currentStep === 3 || currentStep === 4));
+            
+            return (
+              <div
+                key={step}
+                className={`w-16 h-2 rounded-full transition-all duration-300 ${
+                  isCompleted || isActive
+                    ? 'bg-gradient-to-r from-[#8C7FFF] via-[#F26AF2] to-[#FFC478]'
+                    : 'bg-white/10'
+                }`}
+              />
+            );
+          })}
+        </div>
+
         {/* Step 1: Download */}
         {currentStep === 1 && <Card className="step-card active">
             <div className="text-center space-y-6 py-4">
