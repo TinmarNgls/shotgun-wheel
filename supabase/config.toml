@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.track-visit]
 verify_jwt = false
+
+[functions.check-spin-rate-limit]
+verify_jwt = false

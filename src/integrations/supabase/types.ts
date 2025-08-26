@@ -22,6 +22,7 @@ export type Database = {
           last_visit: string
           referrer: string | null
           session_id: string
+          spin_attempts: Json | null
           user_agent: string | null
           visit_count: number
         }
@@ -32,6 +33,7 @@ export type Database = {
           last_visit?: string
           referrer?: string | null
           session_id: string
+          spin_attempts?: Json | null
           user_agent?: string | null
           visit_count?: number
         }
@@ -42,6 +44,7 @@ export type Database = {
           last_visit?: string
           referrer?: string | null
           session_id?: string
+          spin_attempts?: Json | null
           user_agent?: string | null
           visit_count?: number
         }
