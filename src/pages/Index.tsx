@@ -243,7 +243,7 @@ const Index = () => {
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">take your chance</span>
               </div>
-              <p className="text-muted-foreground">
+              <p className="body-regular">
                 Congratulations! You're eligible to spin our lottery wheel
               </p>
               
