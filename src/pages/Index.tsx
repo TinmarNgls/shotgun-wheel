@@ -252,7 +252,7 @@ const Index = () => {
                   </p>
                 </div> : verificationError ? <div className="space-y-4">
                   <XCircle className="w-12 h-12 mx-auto text-destructive" />
-                  <p className="text-destructive font-medium">
+                  <p className="text-destructive font-medium font-grotesk">
                     {verificationError}
                   </p>
                   <Button onClick={() => setCurrentStep(2)} variant="cta">
