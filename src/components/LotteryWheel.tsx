@@ -106,8 +106,8 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           <div className="heading-3">
             {result && result.includes("Try Again") ? "You loose" : result}
           </div>
-          <p className="text-muted-foreground">
-            {result.includes('Discount') || result.includes('Free') || result.includes('VIP') || result.includes('Mystery') 
+          <p className="body-regular">
+            {result && result.includes("Try Again") ? "Sorry, this is not your lucky day this time!" : result && (result.includes("Discount") || result.includes("Free") || result.includes("VIP") || result.includes("Mystery"))
               ? "Check your email for your prize details!"
               : "Better luck next time! Stay tuned for more events."}
           </p>
