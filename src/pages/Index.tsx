@@ -138,7 +138,7 @@ const Index = () => {
           <div className="flex justify-center mb-6">
             <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-monument font-black text-white">Spin the Jogwheel</h1>
+          <h1 className="heading-1">Spin the Jogwheel</h1>
           <p className="text-lg text-[#D4D4D8] max-w-lg mx-auto font-grotesk">Complete these steps  for a chance to win a prize!</p>
         </div>
 
@@ -146,9 +146,8 @@ const Index = () => {
         {/* Step 1: Download */}
         {currentStep === 1 && <Card className="step-card active">
             <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                
-                <span>Download Shotgun App</span>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="heading-3">Download Shotgun App</span>
               </div>
               
               <AppStoreBadges onDownload={handleDownload} />
@@ -160,8 +159,8 @@ const Index = () => {
         {/* Step 2: Follow */}
         {currentStep === 2 && <Card className="step-card active">
             <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <span>Follow & Enable Notifications</span>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="heading-3">Follow & Enable Notifications</span>
               </div>
               <p className="text-muted-foreground mb-4">
                 From the app, follow Shotgun page and enable push & emails
@@ -185,8 +184,8 @@ const Index = () => {
         {/* Step 3: Email Input */}
         {currentStep === 3 && <Card className="step-card active">
             <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <span>Submit Your Email</span>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="heading-3">Submit Your Email</span>
               </div>
               <p className="text-muted-foreground">
                 Enter the email address associated with your Shotgun account
@@ -216,9 +215,9 @@ const Index = () => {
         {/* Step 4: Verification */}
         {currentStep === 4 && <Card className="step-card active">
             <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
+              <div className="flex items-center justify-center space-x-2">
                 <CheckCircle className="w-8 h-8 text-success" />
-                <span>Verifying Your Account</span>
+                <span className="heading-3">Verifying Your Account</span>
               </div>
               
               {isVerifying ? <div className="space-y-4">
@@ -241,9 +240,9 @@ const Index = () => {
         {/* Step 5: Lottery Wheel */}
         {currentStep === 5 && <Card className="step-card active">
             <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
+              <div className="flex items-center justify-center space-x-2">
                 <Target className="w-8 h-8 text-primary" />
-                <span>Spin the Wheel!</span>
+                <span className="heading-3">Spin the Wheel!</span>
               </div>
               <p className="text-muted-foreground">
                 Congratulations! You're eligible to spin our lottery wheel
