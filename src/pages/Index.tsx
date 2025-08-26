@@ -138,8 +138,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <div className="min-h-screen py-8 px-4 relative">
+      {/* Dark overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="max-w-2xl mx-auto space-y-8 relative z-10">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">

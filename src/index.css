@@ -48,7 +48,7 @@
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
+    --gradient-hero: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
     --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(240 5% 10%) 100%);
     
     /* Shadows & Effects */
@@ -123,7 +123,10 @@
 
   body {
     @apply bg-background text-foreground;
-    background: var(--gradient-hero);
+    background: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     min-height: 100vh;
   }
 }
@@ -131,7 +134,9 @@
 @layer components {
   /* Custom Component Styles */
   .hero-gradient {
-    background: var(--gradient-hero);
+    background: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
+    background-size: cover;
+    background-position: center;
   }
   
   .card-gradient {
@@ -143,17 +148,19 @@
   }
   
   .step-card {
-    @apply bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-6 transition-all duration-300 hover:bg-card/90 hover:scale-[1.02];
+    @apply bg-card/90 backdrop-blur-md border border-border/30 rounded-2xl p-6 transition-all duration-300 hover:bg-card/95 hover:scale-[1.02];
     box-shadow: var(--shadow-primary);
+    backdrop-filter: blur(16px);
   }
   
   .step-card.active {
-    @apply border-primary bg-card;
+    @apply border-primary/50 bg-card/95;
     box-shadow: var(--shadow-primary), var(--shadow-glow);
+    backdrop-filter: blur(20px);
   }
   
   .step-card.completed {
-    @apply border-success bg-success/10;
+    @apply border-success/50 bg-success/20 backdrop-blur-md;
   }
   
   .cta-button {
