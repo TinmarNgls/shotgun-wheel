@@ -54,7 +54,6 @@ export type Database = {
         Row: {
           id: number
           shotguner_email: string
-          shotguner_id: number
           status: string
           wheel_spinned_at: string
           winning_code: string | null
@@ -62,7 +61,6 @@ export type Database = {
         Insert: {
           id?: number
           shotguner_email: string
-          shotguner_id: number
           status?: string
           wheel_spinned_at?: string
           winning_code?: string | null
@@ -70,7 +68,6 @@ export type Database = {
         Update: {
           id?: number
           shotguner_email?: string
-          shotguner_id?: number
           status?: string
           wheel_spinned_at?: string
           winning_code?: string | null
@@ -87,7 +84,6 @@ export type Database = {
           expiration_date: string | null
           id: number
           shotguner_email: string | null
-          shotguner_id: number | null
         }
         Insert: {
           amount?: number | null
@@ -98,7 +94,6 @@ export type Database = {
           expiration_date?: string | null
           id?: number
           shotguner_email?: string | null
-          shotguner_id?: number | null
         }
         Update: {
           amount?: number | null
@@ -109,7 +104,6 @@ export type Database = {
           expiration_date?: string | null
           id?: number
           shotguner_email?: string | null
-          shotguner_id?: number | null
         }
         Relationships: []
       }
@@ -119,11 +113,13 @@ export type Database = {
     }
     Functions: {
       assign_winning_code: {
-        Args: {
-          p_code: string
-          p_shotguner_email: string
-          p_shotguner_id: number
-        }
+        Args:
+          | { p_code: string; p_shotguner_email: string }
+          | {
+              p_code: string
+              p_shotguner_email: string
+              p_shotguner_id: number
+            }
         Returns: boolean
       }
       generate_random_code: {
@@ -135,7 +131,7 @@ export type Database = {
         Returns: string
       }
       user_has_winning_code: {
-        Args: { p_shotguner_id: number }
+        Args: { p_shotguner_email: string } | { p_shotguner_id: number }
         Returns: boolean
       }
     }

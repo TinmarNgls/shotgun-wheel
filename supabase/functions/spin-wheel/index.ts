@@ -18,22 +18,22 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { shotguner_id, shotguner_email } = await req.json()
+    const { shotguner_email } = await req.json()
 
-    if (!shotguner_id || !shotguner_email) {
+    if (!shotguner_email) {
       return new Response(
-        JSON.stringify({ error: 'Missing shotguner_id or shotguner_email' }),
+        JSON.stringify({ error: 'Missing shotguner_email' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    console.log(`Processing spin request for shotguner_id: ${shotguner_id}, email: ${shotguner_email}`)
+    console.log(`Processing spin request for email: ${shotguner_email}`)
 
     // Check if user has already spun the wheel
     const { data: existingSpin, error: spinCheckError } = await supabase
       .from('wheel_spins')
       .select('id')
-      .eq('shotguner_id', shotguner_id)
+      .eq('shotguner_email', shotguner_email)
       .maybeSingle()
 
     if (spinCheckError) {
@@ -45,7 +45,7 @@ serve(async (req) => {
     }
 
     if (existingSpin) {
-      console.log(`User ${shotguner_id} has already spun the wheel`)
+      console.log(`User ${shotguner_email} has already spun the wheel`)
       return new Response(
         JSON.stringify({ 
           error: 'already_spun',
@@ -79,7 +79,7 @@ serve(async (req) => {
       const { data: availableCodeData, error: codeError } = await supabase
         .from('winning_codes')
         .select('code, amount, currency, expiration_date')
-        .is('shotguner_id', null)
+        .is('shotguner_email', null)
         .order('id')
         .limit(1)
         .maybeSingle()
@@ -108,7 +108,6 @@ serve(async (req) => {
         const { data: assignSuccess, error: assignError } = await supabase
           .rpc('assign_winning_code', {
             p_code: winningCode,
-            p_shotguner_id: shotguner_id,
             p_shotguner_email: shotguner_email
           })
 
@@ -126,7 +125,6 @@ serve(async (req) => {
     const { error: spinRecordError } = await supabase
       .from('wheel_spins')
       .insert({
-        shotguner_id: shotguner_id,
         shotguner_email: shotguner_email,
         status: isWinner ? 'win' : 'loss',
         winning_code: winningCode
@@ -140,7 +138,7 @@ serve(async (req) => {
       )
     }
 
-    console.log(`Spin recorded successfully for user ${shotguner_id}: ${isWinner ? 'win' : 'loss'}`)
+    console.log(`Spin recorded successfully for user ${shotguner_email}: ${isWinner ? 'win' : 'loss'}`)
 
     // Return the result
     const response = {
