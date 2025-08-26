@@ -103,8 +103,8 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       {/* Result Display */}
       {result && (
         <div className="text-center space-y-4 animate-bounce-in">
-          <div className="text-3xl font-bold text-foreground">
-            {result}
+          <div className="heading-3">
+            {result && result.includes("Try Again") ? "You loose" : result}
           </div>
           <p className="text-muted-foreground">
             {result.includes('Discount') || result.includes('Free') || result.includes('VIP') || result.includes('Mystery') 
