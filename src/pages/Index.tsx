@@ -138,7 +138,7 @@ const Index = () => {
           <div className="flex justify-center mb-6">
             <img src={shotgunLogo} alt="Shotgun App" className="w-20 h-20 rounded-xl shadow-glow" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-monument font-black bg-gradient-primary bg-clip-text text-transparent">
             Win Amazing Prizes!
           </h1>
           <p className="text-xl text-[#D4D4D8] max-w-lg mx-auto">
