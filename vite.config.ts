@@ -14,6 +14,12 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
+  optimizeDeps: {
+    include: [
+      '@lottiefiles/dotlottie-react',
+      '@lottiefiles/dotlottie-web'
+    ]
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
