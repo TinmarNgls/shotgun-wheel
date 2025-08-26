@@ -54,7 +54,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const spinWheelWithCSS = () => {
     if (!wheelRef.current || isSpinning) return;
     
-    console.log('Starting CSS spin animation');
+    console.log('🎯 Starting CSS spin animation');
     setInternalIsSpinning(true);
     setInternalResult(null);
     
@@ -63,7 +63,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
-    console.log('Spin details:', { spins, randomAngle, totalRotation });
+    console.log('🎲 Spin details:', { spins, randomAngle, totalRotation });
     
     // Calculate winning prize based on final angle
     const finalAngle = totalRotation % 360;
@@ -71,38 +71,47 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const winningIndex = Math.floor(finalAngle / sectionSize);
     const winningPrize = prizes[winningIndex];
     
-    console.log('Winning prize calculated:', winningPrize);
+    console.log('🏆 Winning prize calculated:', winningPrize);
     
-    // Remove any existing animation class and force reflow
+    // Clear animation class and inline transform to prevent conflicts
     setAnimationClass('');
-    if (wheelRef.current) {
-      void wheelRef.current.offsetWidth; // Force reflow
-      console.log('Forced reflow, about to add animation class');
-    }
     
-    // Add the appropriate animation class based on number of spins
-    const animationClasses = ['wheel-spinning', 'wheel-spinning-alt', 'wheel-spinning-extra'];
-    const selectedClass = animationClasses[(spins - 7) % 3];
-    console.log('Adding animation class:', selectedClass);
-    setAnimationClass(selectedClass);
-    
-    // Set final rotation and handle completion after animation
-    setTimeout(() => {
-      console.log('Animation completed, setting final rotation');
-      setRotation(totalRotation % 360);
-      setInternalIsSpinning(false);
-      setAnimationClass('');
+    // Use requestAnimationFrame for better timing and reflow handling
+    requestAnimationFrame(() => {
+      if (!wheelRef.current) return;
       
-      // Handle result based on whether there's an external handler
-      if (onSpin) {
-        // External handler will manage the result
-        console.log('External handler will manage result');
-      } else {
-        setInternalResult(winningPrize.text);
-        onComplete(winningPrize.value);
-        console.log('Internal result set:', winningPrize.text);
-      }
-    }, 3500);
+      // Remove inline transform style completely when animating
+      wheelRef.current.style.transform = '';
+      
+      // Force reflow more aggressively
+      void wheelRef.current.offsetHeight;
+      void wheelRef.current.offsetWidth;
+      console.log('💫 Forced reflow, applying animation');
+      
+      // Add the appropriate animation class
+      const animationClasses = ['wheel-spinning', 'wheel-spinning-alt', 'wheel-spinning-extra'];
+      const selectedClass = animationClasses[(spins - 7) % 3];
+      console.log('🎨 Adding animation class:', selectedClass);
+      setAnimationClass(selectedClass);
+      
+      // Set final rotation and handle completion after animation
+      setTimeout(() => {
+        console.log('✅ Animation completed, setting final rotation');
+        setRotation(totalRotation % 360);
+        setInternalIsSpinning(false);
+        setAnimationClass('');
+        
+        // Handle result based on whether there's an external handler
+        if (onSpin) {
+          // External handler will manage the result
+          console.log('🔄 External handler will manage result');
+        } else {
+          setInternalResult(winningPrize.text);
+          onComplete(winningPrize.value);
+          console.log('🎊 Internal result set:', winningPrize.text);
+        }
+      }, 3500);
+    });
   };
 
   const spinWheel = () => {
@@ -127,13 +136,13 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           alt="Jogwheel" 
           className={`w-full h-full object-contain transition-all duration-100 ${animationClass}`}
           style={{ 
-            transform: animationClass ? 'none' : `rotate(${rotation}deg)`,
-            transformOrigin: '50% 50%',
+            transform: animationClass ? undefined : `rotate(${rotation}deg)`,
+            transformOrigin: 'center center',
             willChange: 'transform',
             filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
           }}
           onAnimationEnd={() => {
-            console.log('CSS animation ended');
+            console.log('🏁 CSS animation ended');
           }}
         />
         
