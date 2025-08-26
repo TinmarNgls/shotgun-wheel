@@ -230,8 +230,10 @@ const Index = () => {
   };
   const goToPreviousStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-      updateStepStatus(currentStep - 1, 'active');
+      // If on step 5 (wheel), go back to step 3 (email) to skip verification screen
+      const targetStep = currentStep === 5 ? 3 : currentStep - 1;
+      setCurrentStep(targetStep);
+      updateStepStatus(targetStep, 'active');
       // Clear any verification errors when going back
       if (verificationError) {
         setVerificationError('');
