@@ -371,20 +371,6 @@ const Index = () => {
             </div>
           </Card>}
 
-        {/* Completion Message */}
-        {finalResult && <Card className="step-card completed">
-            <div className="text-center space-y-6">
-              <div className="text-3xl font-bold text-success">
-                🎉 Congratulations!
-              </div>
-              <p className="text-lg text-muted-foreground">
-                You've successfully completed the challenge!
-              </p>
-              <Button onClick={resetProcess} className="secondary-button">
-                🔄 Try Again
-              </Button>
-            </div>
-          </Card>}
 
         {/* Error Display - Removed */}
 
