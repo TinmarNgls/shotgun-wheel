@@ -386,7 +386,7 @@ const Index = () => {
                   {isCheckingSpinEligibility ? <>
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
                       Checking...
-                    </> : isSpinning ? 'Spinning...' : 'Spin the Wheel!'}
+                    </> : isSpinning ? 'Spinning...' : 'Spin it!'}
                 </Button>}
             </>}
         </div>
