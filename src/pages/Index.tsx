@@ -241,7 +241,6 @@ const Index = () => {
         {currentStep === 5 && <Card className="step-card active">
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2">
-                <Target className="w-8 h-8 text-primary" />
                 <span className="heading-3">Spin the Wheel!</span>
               </div>
               <p className="text-muted-foreground">
