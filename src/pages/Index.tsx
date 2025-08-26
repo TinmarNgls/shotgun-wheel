@@ -140,7 +140,13 @@ const Index = () => {
     })));
   };
   const goToNextStep = () => {
-    if (currentStep < 5 && !finalResult) {
+    if (currentStep === 4 && !isVerified) {
+      // If verification failed, go back to email step
+      setCurrentStep(3);
+      updateStepStatus(3, 'active');
+      updateStepStatus(4, 'pending');
+      setVerificationError('');
+    } else if (currentStep < 5 && !finalResult) {
       setCurrentStep(currentStep + 1);
       updateStepStatus(currentStep + 1, 'active');
     }
