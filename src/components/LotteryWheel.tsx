@@ -90,6 +90,14 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   };
 
+  // Debug: Component mounting
+  console.log("🎯 LotteryWheel component rendering", { 
+    externalIsSpinning, 
+    externalResult, 
+    isSpinning, 
+    result 
+  });
+
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative" style={{ width: 320, height: 320 }}>
@@ -100,8 +108,10 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           autoplay={false}
           style={{ width: 320, height: 320, display: "block" }}
           dotLottieRefCallback={(dotLottie) => {
+            console.log("🔗 DotLottie ref callback called", { dotLottie });
             playerRef.current = dotLottie;
             if (dotLottie) {
+              console.log("✅ DotLottie player is ready!");
               setIsPlayerReady(true);
             }
           }}
