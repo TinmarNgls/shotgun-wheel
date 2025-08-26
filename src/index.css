@@ -148,7 +148,7 @@
   }
   
   .step-card {
-    @apply bg-card/90 backdrop-blur-md border border-border/30 rounded-2xl p-6 transition-all duration-300 hover:bg-card/95 hover:scale-[1.02];
+    @apply bg-card/90 backdrop-blur-md border border-border/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:bg-card/95 hover:scale-[1.02];
     box-shadow: var(--shadow-primary);
     backdrop-filter: blur(16px);
   }

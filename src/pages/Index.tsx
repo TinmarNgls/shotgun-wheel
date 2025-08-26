@@ -138,23 +138,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4 relative">
+    <div className="min-h-screen py-4 sm:py-8 px-4 relative">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/20"></div>
-      <div className="max-w-2xl mx-auto space-y-8 relative z-10">
+      <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8 relative z-10">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center mb-6">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <img 
               src={shotgunLogo} 
               alt="Shotgun App" 
               className="w-20 h-20 rounded-xl shadow-glow bg-white p-2"
             />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent px-2">
             Win Amazing Prizes!
           </h1>
-          <p className="text-xl text-muted-foreground max-w-lg mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto px-4">
             Complete these simple steps and spin our lottery wheel for a chance to win exclusive discounts and prizes!
           </p>
         </div>
@@ -165,12 +165,12 @@ const Index = () => {
         {/* Step 1: Download */}
         {currentStep === 1 && (
           <Card className="step-card active">
-            <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <Download className="w-8 h-8 text-primary" />
+            <div className="text-center space-y-4 sm:space-y-6">
+              <div className="flex items-center justify-center space-x-2 text-xl sm:text-2xl font-bold">
+                <Download className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <span>Download Shotgun</span>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-sm sm:text-base text-muted-foreground px-2">
                 First, download the Shotgun app from your device's app store
               </p>
               <AppStoreBadges onDownload={handleDownload} />
@@ -181,12 +181,12 @@ const Index = () => {
         {/* Step 2: Follow */}
         {currentStep === 2 && (
           <Card className="step-card active">
-            <div className="text-center space-y-6">
-              <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <Target className="w-8 h-8 text-secondary" />
-                <span>Follow & Enable Notifications</span>
+            <div className="text-center space-y-4 sm:space-y-6">
+              <div className="flex items-center justify-center space-x-2 text-xl sm:text-2xl font-bold">
+                <Target className="w-6 h-6 sm:w-8 sm:h-8 text-secondary" />
+                <span className="text-center">Follow & Enable Notifications</span>
               </div>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-sm sm:text-base text-muted-foreground mb-4 px-2">
                 Open the Shotgun app, follow our official page, and enable email + push notifications
               </p>
               
@@ -200,10 +200,10 @@ const Index = () => {
                 <span>Go to Shotgun Page</span>
               </a>
               
-              <div className="mt-6">
+              <div className="mt-4 sm:mt-6">
                 <Button 
                   onClick={handleFollowComplete}
-                  className="cta-button"
+                  className="cta-button text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4"
                 >
                   ✓ I've Followed & Enabled Notifications
                 </Button>

@@ -18,29 +18,25 @@ export const AppStoreBadges = ({ onDownload }: AppStoreBadgesProps) => {
       {/* App Store Button */}
       <button
         onClick={() => handleStoreClick('ios')}
-        className="group relative overflow-hidden bg-black hover:bg-gray-900 text-white rounded-xl px-6 py-3 transition-all duration-300 transform hover:scale-105 active:scale-95 min-w-[200px]"
+        className="transition-all duration-300 transform hover:scale-105 active:scale-95"
       >
-        <div className="flex items-center space-x-3">
-          <div className="text-2xl">🍎</div>
-          <div className="text-left">
-            <div className="text-xs opacity-80">Download on the</div>
-            <div className="text-lg font-semibold">App Store</div>
-          </div>
-        </div>
+        <img 
+          src="/lovable-uploads/d5ed4c9b-f8d0-47ed-85eb-484e64ce7e1a.png" 
+          alt="Download on the App Store"
+          className="h-14 w-auto rounded-lg"
+        />
       </button>
 
       {/* Google Play Button */}
       <button
         onClick={() => handleStoreClick('android')}
-        className="group relative overflow-hidden bg-black hover:bg-gray-900 text-white rounded-xl px-6 py-3 transition-all duration-300 transform hover:scale-105 active:scale-95 min-w-[200px]"
+        className="transition-all duration-300 transform hover:scale-105 active:scale-95"
       >
-        <div className="flex items-center space-x-3">
-          <div className="text-2xl">📱</div>
-          <div className="text-left">
-            <div className="text-xs opacity-80">Get it on</div>
-            <div className="text-lg font-semibold">Google Play</div>
-          </div>
-        </div>
+        <img 
+          src="/lovable-uploads/534afd72-b1cf-4b87-9a51-73f5edd90b1e.png" 
+          alt="Get it on Google Play"
+          className="h-14 w-auto rounded-lg"
+        />
       </button>
     </div>
   );
