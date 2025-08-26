@@ -197,7 +197,7 @@ const Index = () => {
               <div className="space-y-4 max-w-sm mx-auto">
                 <Input type="email" placeholder="your-email@example.com" value={email} onChange={e => setEmail(e.target.value)} className="text-center bg-input border-border focus:border-primary" />
                 <Button onClick={handleEmailSubmit} disabled={!email.trim()} className="cta-button w-full">
-                  Done
+                  Verify my account
                 </Button>
               </div>
             </div>
