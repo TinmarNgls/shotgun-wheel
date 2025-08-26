@@ -208,9 +208,9 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
             })()
           ) : (
             <>
-              <div className="heading-3">YOU WIN 🎉</div>
+              <div className="heading-3">You lose</div>
               <p className="body-regular">
-                Congratulations! You won a prize!
+                Sorry, this is not your lucky day this time!
               </p>
             </>
           )}
