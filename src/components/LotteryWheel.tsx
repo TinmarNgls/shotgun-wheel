@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Copy, Check } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface LotteryWheelProps {
   onComplete: (result: string) => void;
@@ -18,9 +20,11 @@ const prizes = [
 ];
 
 export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinning, result: externalResult }: LotteryWheelProps) => {
+  const { toast } = useToast();
   const [internalIsSpinning, setInternalIsSpinning] = useState(false);
   const [internalResult, setInternalResult] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
+  const [copied, setCopied] = useState(false);
   
   // Use external state if provided, otherwise use internal state
   const isSpinning = externalIsSpinning !== undefined ? externalIsSpinning : internalIsSpinning;
@@ -103,14 +107,55 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       {/* Result Display */}
       {result && (
         <div className="text-center space-y-4 animate-bounce-in">
-          <div className="heading-3">
-            {result && result.includes("Try Again") ? "You loose" : result}
-          </div>
-          <p className="body-regular">
-            {result && result.includes("Try Again") ? "Sorry, this is not your lucky day this time!" : result && (result.includes("Discount") || result.includes("Free") || result.includes("VIP") || result.includes("Mystery"))
-              ? "Check your email for your prize details!"
-              : "Better luck next time! Stay tuned for more events."}
-          </p>
+          {result.includes("Try Again") ? (
+            <>
+              <div className="heading-3">You loose</div>
+              <p className="body-regular">
+                Sorry, this is not your lucky day this time!
+              </p>
+            </>
+          ) : result.includes("Code:") ? (
+            <>
+              <div className="heading-3">YOU WIN 🎉</div>
+              <p className="body-regular">
+                This is your lucky day ! Here is your 5€ code, make sure to save it
+              </p>
+              <div className="flex items-center justify-center gap-3 mt-6">
+                <div 
+                  className="px-6 py-3 rounded-lg text-white font-bold text-lg tracking-wider"
+                  style={{
+                    background: 'linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)'
+                  }}
+                >
+                  {result.split("Code: ")[1]}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    const code = result.split("Code: ")[1];
+                    await navigator.clipboard.writeText(code);
+                    setCopied(true);
+                    toast({
+                      title: "Code copied!",
+                      description: "The code has been copied to your clipboard."
+                    });
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="h-12 w-12 p-0"
+                >
+                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="heading-3">{result}</div>
+              <p className="body-regular">
+                Check your email for your prize details!
+              </p>
+            </>
+          )}
         </div>
       )}
     </div>
