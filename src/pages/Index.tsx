@@ -164,7 +164,7 @@ const Index = () => {
                 <span>Follow & Enable Notifications</span>
               </div>
               <p className="text-muted-foreground mb-4">
-                Open the Shotgun app, follow our official page, and enable email + push notifications
+                From the app, follow Shotgun page and enable push & emails
               </p>
               
               <Button 
