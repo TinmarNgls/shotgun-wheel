@@ -27,7 +27,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const [internalResult, setInternalResult] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [animationClass, setAnimationClass] = useState('');
+  const [currentAnimation, setCurrentAnimation] = useState<Animation | null>(null);
   const wheelRef = useRef<HTMLImageElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   
@@ -38,7 +38,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   // Effect to handle external spinning state changes
   useEffect(() => {
     if (externalIsSpinning && wheelRef.current) {
-      spinWheelWithCSS();
+      spinWheelWithWebAPI();
     }
   }, [externalIsSpinning]);
 
@@ -51,15 +51,21 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   }, [result]);
 
-  const spinWheelWithCSS = () => {
+  const spinWheelWithWebAPI = () => {
     if (!wheelRef.current || isSpinning) return;
     
-    console.log('🎯 Starting CSS spin animation');
+    console.log('🎯 Starting Web Animations API spin');
     setInternalIsSpinning(true);
     setInternalResult(null);
     
-    // Generate random number of rotations (7-9 full rotations + random angle)
-    const spins = Math.floor(Math.random() * 3) + 7;
+    // Stop any existing animation
+    if (currentAnimation) {
+      currentAnimation.cancel();
+      setCurrentAnimation(null);
+    }
+    
+    // Calculate spin parameters for realistic wheel behavior
+    const spins = 7 + Math.floor(Math.random() * 3); // 7-9 full rotations
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
@@ -73,44 +79,44 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     
     console.log('🏆 Winning prize calculated:', winningPrize);
     
-    // Clear animation class and inline transform to prevent conflicts
-    setAnimationClass('');
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    // Use requestAnimationFrame for better timing and reflow handling
-    requestAnimationFrame(() => {
-      if (!wheelRef.current) return;
+    // Start the Web Animations API animation
+    const animation = wheelRef.current.animate(
+      [
+        { transform: `rotate(${rotation}deg)` },
+        { transform: `rotate(${rotation + totalRotation}deg)` }
+      ],
+      {
+        duration: prefersReducedMotion ? 100 : 3500,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        fill: 'forwards'
+      }
+    );
+    
+    setCurrentAnimation(animation);
+    console.log('🎨 Web Animation started');
+    
+    // Handle animation completion
+    animation.finished.then(() => {
+      console.log('✅ Web Animation completed');
+      setRotation((rotation + totalRotation) % 360);
+      setInternalIsSpinning(false);
+      setCurrentAnimation(null);
       
-      // Remove inline transform style completely when animating
-      wheelRef.current.style.transform = '';
-      
-      // Force reflow more aggressively
-      void wheelRef.current.offsetHeight;
-      void wheelRef.current.offsetWidth;
-      console.log('💫 Forced reflow, applying animation');
-      
-      // Add the appropriate animation class
-      const animationClasses = ['wheel-spinning', 'wheel-spinning-alt', 'wheel-spinning-extra'];
-      const selectedClass = animationClasses[(spins - 7) % 3];
-      console.log('🎨 Adding animation class:', selectedClass);
-      setAnimationClass(selectedClass);
-      
-      // Set final rotation and handle completion after animation
-      setTimeout(() => {
-        console.log('✅ Animation completed, setting final rotation');
-        setRotation(totalRotation % 360);
-        setInternalIsSpinning(false);
-        setAnimationClass('');
-        
-        // Handle result based on whether there's an external handler
-        if (onSpin) {
-          // External handler will manage the result
-          console.log('🔄 External handler will manage result');
-        } else {
-          setInternalResult(winningPrize.text);
-          onComplete(winningPrize.value);
-          console.log('🎊 Internal result set:', winningPrize.text);
-        }
-      }, 3500);
+      // Handle result based on whether there's an external handler
+      if (onSpin) {
+        console.log('🔄 External handler will manage result');
+      } else {
+        setInternalResult(winningPrize.text);
+        onComplete(winningPrize.value);
+        console.log('🎊 Internal result set:', winningPrize.text);
+      }
+    }).catch((error) => {
+      console.error('❌ Animation failed:', error);
+      setInternalIsSpinning(false);
+      setCurrentAnimation(null);
     });
   };
 
@@ -122,7 +128,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     if (onSpin) {
       onSpin();
     } else {
-      spinWheelWithCSS();
+      spinWheelWithWebAPI();
     }
   };
 
@@ -132,17 +138,14 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
         {/* Wheel Container */}
         <img 
           ref={wheelRef}
-          src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
+          src="/lovable-uploads/f73cf581-d949-480b-9d60-76d7f8bc289d.png" 
           alt="Jogwheel" 
-          className={`w-full h-full object-contain transition-all duration-100 ${animationClass}`}
+          className="w-full h-full object-contain"
           style={{ 
-            transform: animationClass ? undefined : `rotate(${rotation}deg)`,
+            transform: `rotate(${rotation}deg)`,
             transformOrigin: 'center center',
             willChange: 'transform',
             filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
-          }}
-          onAnimationEnd={() => {
-            console.log('🏁 CSS animation ended');
           }}
         />
         
