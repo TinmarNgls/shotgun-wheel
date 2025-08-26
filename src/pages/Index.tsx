@@ -151,22 +151,17 @@ const Index = () => {
         }
       });
 
-      // Handle the case where the function returns an error (like already_spun)
+      console.log('Spin response - data:', data);
+      console.log('Spin response - error:', error);
+
+      // If there's an error response, it might still contain valid data in a 400 response
       if (error) {
-        console.log('Function error details:', error);
+        console.log('Full error object:', JSON.stringify(error, null, 2));
         
-        // Try to parse the error context for the actual response
-        let errorData = null;
-        try {
-          if (error.context && error.context.body) {
-            errorData = JSON.parse(error.context.body);
-          }
-        } catch (e) {
-          console.log('Could not parse error context');
-        }
-        
-        if (errorData && errorData.error === 'already_spun') {
-          setSpinError('You have already spun the wheel. Only one spin per user is allowed.');
+        // The edge function returns 400 status with proper JSON for business logic errors
+        // Check if we have a proper error message in the error object
+        if (error.message) {
+          setSpinError(error.message);
         } else {
           setSpinError('Something went wrong. Please try again.');
         }
@@ -174,6 +169,7 @@ const Index = () => {
         return;
       }
 
+      // Handle successful response with potential error status in data
       if (data && data.error) {
         if (data.error === 'already_spun') {
           setSpinError('You have already spun the wheel. Only one spin per user is allowed.');
@@ -201,8 +197,8 @@ const Index = () => {
       }, 3000);
 
     } catch (error) {
-      console.error('Error spinning wheel:', error);
-      setSpinError('Something went wrong. Please try again.');
+      console.error('Network error spinning wheel:', error);
+      setSpinError('Network error. Please check your connection and try again.');
       setIsCheckingSpinEligibility(false);
     }
   };
