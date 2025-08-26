@@ -143,16 +143,22 @@
   /* Typography Components */
   .heading-1 {
     color: #FFFFFF;
-    font-family: 'PP Monument Extended', sans-serif;
+    font-family: "Monument Extended";
     font-size: 24px;
-    line-height: 30px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    text-transform: uppercase;
   }
   
   .heading-3 {
     color: #FFFFFF;
-    font-family: 'PP Monument Extended', sans-serif;
-    font-size: 14px;
-    line-height: 17px;
+    font-family: "Monument Extended";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    text-transform: uppercase;
   }
 
   /* Custom Component Styles */
