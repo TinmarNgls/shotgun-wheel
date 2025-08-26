@@ -375,7 +375,7 @@ const Index = () => {
               <div className="flex items-center justify-center space-x-2">
                 <span className="heading-3">take your chance</span>
               </div>
-              <p className="body-regular">You're eligible to spin our lucky jogwheel</p>
+              <p className="body-regular">Try and spin the jogwheel to discover if you've won!</p>
               
               <LotteryWheel onComplete={handleLotteryComplete} isSpinning={isSpinning} result={wheelResult} />
               
