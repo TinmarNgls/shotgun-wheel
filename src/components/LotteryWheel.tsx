@@ -90,72 +90,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   };
 
-  const spinWheel = () => {
-    console.log("🎪 spinWheel called", { isSpinning });
-    if (isSpinning) return;
-    
-    // Call onSpin if provided, otherwise handle internally
-    if (onSpin) {
-      onSpin();
-    } else {
-      spinLottieWheel();
-    }
-  };
-
-  // Debug test function - force play
-  const forcePlay = () => {
-    console.log("🚀 Force play called");
-    if (playerRef.current) {
-      try {
-        playerRef.current.stop();
-        playerRef.current.play();
-        console.log("🎬 Force play executed");
-      } catch (error) {
-        console.error("❌ Force play error:", error);
-      }
-    }
-  };
-
-  // Handle Lottie player ready
-  const handlePlayerReady = () => {
-    console.log("✅ Lottie player is ready!");
-    setIsPlayerReady(true);
-    // Force start to bypass reduced motion
-    if (playerRef.current) {
-      try {
-        playerRef.current.play();
-        setTimeout(() => playerRef.current.stop(), 100); // Quick test
-        console.log("🔄 Player test completed");
-      } catch (error) {
-        console.error("❌ Player ready test error:", error);
-      }
-    }
-  };
-
-  // Handle Lottie animation complete event
-  const handleLottieComplete = () => {
-    console.log("🏁 Animation completed");
-    if (onSpin) {
-      // External handler will manage the result
-      setInternalIsSpinning(false);
-    }
-  };
-
-  // Handle load error
-  const handleLoadError = (error: any) => {
-    console.error("❌ Lottie load error:", error);
-    toast({
-      title: "Animation Error",
-      description: "Failed to load the wheel animation. Please try again.",
-      variant: "destructive"
-    });
-  };
-
-  // Handle data ready
-  const handleDataReady = () => {
-    console.log("📊 Lottie data ready");
-  };
-
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative" style={{ width: 320, height: 320 }}>
@@ -166,46 +100,13 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
           autoplay={false}
           style={{ width: 320, height: 320, display: "block" }}
           dotLottieRefCallback={(dotLottie) => {
-            console.log("🔗 DotLottie ref callback called", { dotLottie });
             playerRef.current = dotLottie;
             if (dotLottie) {
-              console.log("✅ DotLottie player is ready!");
               setIsPlayerReady(true);
-              // Force start to bypass reduced motion
-              try {
-                dotLottie.play();
-                setTimeout(() => dotLottie.stop(), 100); // Quick test
-                console.log("🔄 Player test completed");
-              } catch (error) {
-                console.error("❌ Player ready test error:", error);
-              }
             }
           }}
         />
-        
-        {/* Debug controls */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="absolute top-0 right-0 space-x-2 bg-black/50 p-2 rounded">
-            <Button size="sm" onClick={forcePlay}>
-              Force Play
-            </Button>
-            <span className="text-white text-xs">
-              Ready: {isPlayerReady ? '✅' : '❌'}
-            </span>
-          </div>
-        )}
       </div>
-      
-      {/* Spin Button */}
-      {!isSpinning && !result && (
-        <Button 
-          onClick={spinWheel}
-          disabled={!isPlayerReady}
-          className="px-8 py-3 text-lg font-grotesk font-bold bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
-        >
-          {!isPlayerReady ? "Loading..." : "SPIN THE WHEEL"}
-        </Button>
-      )}
       
       {/* Result Display */}
       {result && (
