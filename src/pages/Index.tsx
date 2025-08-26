@@ -136,8 +136,11 @@ const Index = () => {
   const handleSpin = async () => {
     if (isSpinning || isCheckingSpinEligibility) return;
     
-    // Check if we have shotgunerId, fallback to fake ID for testing
-    const userShotgunerId = shotgunerId || 12345; // Temporary fallback for testing
+    // Check if we have shotgunerId, create a unique fallback based on email for testing
+    const userShotgunerId = shotgunerId || Math.abs(email.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0));
     
     setIsCheckingSpinEligibility(true);
     setSpinError('');
