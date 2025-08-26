@@ -31,13 +31,10 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const result = externalResult !== undefined ? externalResult : internalResult;
 
   const spinWheel = () => {
+    console.log('spinWheel called, isSpinning:', isSpinning);
     if (isSpinning) return;
     
-    if (onSpin) {
-      onSpin();
-      return;
-    }
-    
+    // Always update rotation for visual spinning effect
     setInternalIsSpinning(true);
     setInternalResult(null);
     
@@ -46,19 +43,29 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
-    setRotation(prev => prev + totalRotation);
+    console.log('Setting rotation from', rotation, 'to', rotation + totalRotation);
+    setRotation(prev => {
+      const newRotation = prev + totalRotation;
+      console.log('Rotation updated to:', newRotation);
+      return newRotation;
+    });
     
-    // Determine winning prize based on final angle
-    const finalAngle = (rotation + totalRotation) % 360;
-    const sectionSize = 360 / prizes.length;
-    const winningIndex = Math.floor(finalAngle / sectionSize);
-    const winningPrize = prizes[winningIndex];
-    
-    setTimeout(() => {
-      setInternalIsSpinning(false);
-      setInternalResult(winningPrize.text);
-      onComplete(winningPrize.value);
-    }, 3000);
+    // If there's an external onSpin handler, call it
+    if (onSpin) {
+      onSpin();
+    } else {
+      // Only handle internal result if no external handler
+      const finalAngle = (rotation + totalRotation) % 360;
+      const sectionSize = 360 / prizes.length;
+      const winningIndex = Math.floor(finalAngle / sectionSize);
+      const winningPrize = prizes[winningIndex];
+      
+      setTimeout(() => {
+        setInternalIsSpinning(false);
+        setInternalResult(winningPrize.text);
+        onComplete(winningPrize.value);
+      }, 3000);
+    }
   };
 
   return (
