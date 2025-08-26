@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      visitor_sessions: {
+        Row: {
+          created_at: string
+          first_visit: string
+          id: number
+          last_visit: string
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+          visit_count: number
+        }
+        Insert: {
+          created_at?: string
+          first_visit?: string
+          id?: number
+          last_visit?: string
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+          visit_count?: number
+        }
+        Update: {
+          created_at?: string
+          first_visit?: string
+          id?: number
+          last_visit?: string
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+          visit_count?: number
+        }
+        Relationships: []
+      }
       wheel_spins: {
         Row: {
           id: number
