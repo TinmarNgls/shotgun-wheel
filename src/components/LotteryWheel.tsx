@@ -1,8 +1,10 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+// @ts-ignore
+const anime = require('animejs');
 
 interface LotteryWheelProps {
   onComplete: (result: string) => void;
@@ -26,16 +28,22 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
   const [internalResult, setInternalResult] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
+  const wheelRef = useRef<HTMLImageElement>(null);
   
   // Use external state if provided, otherwise use internal state
   const isSpinning = externalIsSpinning !== undefined ? externalIsSpinning : internalIsSpinning;
   const result = externalResult !== undefined ? externalResult : internalResult;
 
-  const spinWheel = () => {
-    console.log('spinWheel called, isSpinning:', isSpinning);
-    if (isSpinning) return;
+  // Effect to handle external spinning state changes
+  useEffect(() => {
+    if (externalIsSpinning && wheelRef.current) {
+      spinWheelWithAnime();
+    }
+  }, [externalIsSpinning]);
+
+  const spinWheelWithAnime = () => {
+    if (!wheelRef.current || isSpinning) return;
     
-    // Always update rotation for visual spinning effect
     setInternalIsSpinning(true);
     setInternalResult(null);
     
@@ -44,28 +52,42 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     const randomAngle = Math.floor(Math.random() * 360);
     const totalRotation = spins * 360 + randomAngle;
     
-    console.log('Setting rotation from', rotation, 'to', rotation + totalRotation);
-    setRotation(prev => {
-      const newRotation = prev + totalRotation;
-      console.log('Rotation updated to:', newRotation);
-      return newRotation;
-    });
+    // Calculate winning prize based on final angle
+    const finalAngle = (rotation + totalRotation) % 360;
+    const sectionSize = 360 / prizes.length;
+    const winningIndex = Math.floor(finalAngle / sectionSize);
+    const winningPrize = prizes[winningIndex];
     
-    // If there's an external onSpin handler, call it
+    // Animate with anime.js
+    anime({
+      targets: wheelRef.current,
+      rotate: rotation + totalRotation,
+      duration: 3500,
+      easing: 'easeOutQuart',
+      complete: () => {
+        setRotation(prev => prev + totalRotation);
+        setInternalIsSpinning(false);
+        
+        // Handle result based on whether there's an external handler
+        if (onSpin) {
+          // External handler will manage the result
+        } else {
+          setInternalResult(winningPrize.text);
+          onComplete(winningPrize.value);
+        }
+      }
+    });
+  };
+
+  const spinWheel = () => {
+    console.log('spinWheel called, isSpinning:', isSpinning);
+    if (isSpinning) return;
+    
+    // Call onSpin if provided, otherwise handle internally
     if (onSpin) {
       onSpin();
     } else {
-      // Only handle internal result if no external handler
-      const finalAngle = (rotation + totalRotation) % 360;
-      const sectionSize = 360 / prizes.length;
-      const winningIndex = Math.floor(finalAngle / sectionSize);
-      const winningPrize = prizes[winningIndex];
-      
-      setTimeout(() => {
-        setInternalIsSpinning(false);
-        setInternalResult(winningPrize.text);
-        onComplete(winningPrize.value);
-      }, 3000);
+      spinWheelWithAnime();
     }
   };
 
@@ -74,14 +96,13 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       <div className="relative w-80 h-80">
         {/* Wheel Container */}
         <img 
+          ref={wheelRef}
           src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
           alt="Jogwheel" 
           className="w-full h-full object-contain"
           style={{ 
             transform: `rotate(${rotation}deg)`,
-            transition: isSpinning 
-              ? 'transform 3000ms ease-in-out' 
-              : 'transform 300ms ease-out'
+            filter: isSpinning ? 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))' : 'none'
           }}
         />
         
