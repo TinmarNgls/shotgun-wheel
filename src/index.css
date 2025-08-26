@@ -161,9 +161,21 @@
   }
   
   .cta-button {
-    @apply bg-primary hover:bg-primary-glow text-primary-foreground font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
-    background: var(--gradient-primary);
-    box-shadow: var(--shadow-primary);
+    display: inline-flex;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    background: #FFF;
+    color: hsl(var(--background));
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cta-button:hover {
+    background: #F8F8F8;
+    transform: scale(1.02);
   }
   
   .secondary-button {
