@@ -14,7 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      wheel_spins: {
+        Row: {
+          id: number
+          shotguner_email: string
+          shotguner_id: number
+          wheel_spinned_at: string
+        }
+        Insert: {
+          id?: number
+          shotguner_email: string
+          shotguner_id: number
+          wheel_spinned_at?: string
+        }
+        Update: {
+          id?: number
+          shotguner_email?: string
+          shotguner_id?: number
+          wheel_spinned_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
