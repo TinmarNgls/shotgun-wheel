@@ -18,7 +18,7 @@ export const AppStoreBadges = ({ onDownload }: AppStoreBadgesProps) => {
       {/* App Store Button */}
       <button
         onClick={() => handleStoreClick('ios')}
-        className="transition-all duration-300 transform hover:scale-105 active:scale-95"
+        className="transition-all duration-300"
       >
         <img 
           src="/lovable-uploads/d5ed4c9b-f8d0-47ed-85eb-484e64ce7e1a.png" 
@@ -30,7 +30,7 @@ export const AppStoreBadges = ({ onDownload }: AppStoreBadgesProps) => {
       {/* Google Play Button */}
       <button
         onClick={() => handleStoreClick('android')}
-        className="transition-all duration-300 transform hover:scale-105 active:scale-95"
+        className="transition-all duration-300"
       >
         <img 
           src="/lovable-uploads/534afd72-b1cf-4b87-9a51-73f5edd90b1e.png" 
