@@ -65,20 +65,17 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     <div className="flex flex-col items-center space-y-8">
       <div className="relative w-80 h-80">
         {/* Wheel Container */}
-        <div 
-          className="w-full h-full transition-transform ease-out"
+        <img 
+          src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
+          alt="Jogwheel" 
+          className="w-full h-full object-contain"
           style={{ 
             transform: `rotate(${rotation}deg)`,
-            transitionDuration: isSpinning ? '3000ms' : '300ms',
-            transitionTimingFunction: isSpinning ? 'ease-in-out' : 'ease-out'
+            transition: isSpinning 
+              ? 'transform 3000ms ease-in-out' 
+              : 'transform 300ms ease-out'
           }}
-        >
-          <img 
-            src="/lovable-uploads/f49d48ad-1929-4be0-9b4a-9c67a687d5df.png" 
-            alt="Jogwheel" 
-            className="w-full h-full object-contain"
-          />
-        </div>
+        />
         
         {/* Pointer */}
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-b-6 border-l-transparent border-r-transparent border-b-blue-400 z-20 shadow-[0_0_10px_rgba(59,130,246,0.6)]" 
