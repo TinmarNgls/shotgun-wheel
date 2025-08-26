@@ -185,7 +185,6 @@ const Index = () => {
 
       console.log(`Rate limit check passed. Attempts remaining: ${rateLimitData?.attemptsRemaining || 'unknown'}`);
     
-    try {
       // Call our backend spin function
       const {
         data,
@@ -245,13 +244,9 @@ const Index = () => {
         }
         handleLotteryComplete(displayResult);
       }, 3000);
+      
     } catch (error) {
-      console.error('Network error spinning wheel:', error);
-      setSpinError('Network error. Please check your connection and try again.');
-      setIsCheckingSpinEligibility(false);
-    }
-    } catch (rateLimitCheckError) {
-      console.error('Error during rate limit check:', rateLimitCheckError);
+      console.error('Error during spin process:', error);
       setSpinError('Unable to process request. Please try again.');
       setIsCheckingSpinEligibility(false);
     }
