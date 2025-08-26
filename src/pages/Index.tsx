@@ -186,7 +186,6 @@ const Index = () => {
         {currentStep === 3 && <Card className="step-card active">
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-2 text-2xl font-bold">
-                <Mail className="w-8 h-8 text-accent" />
                 <span>Submit Your Email</span>
               </div>
               <p className="text-muted-foreground">
