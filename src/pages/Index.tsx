@@ -158,18 +158,8 @@ const Index = () => {
       if (data.error) {
         if (data.error === 'already_spun') {
           setSpinError('You have already spun the wheel. Only one spin per user is allowed.');
-          toast({
-            title: "Already Spun",
-            description: "You have already used your spin for this challenge.",
-            variant: "destructive"
-          });
         } else {
           setSpinError(data.message || 'Something went wrong. Please try again.');
-          toast({
-            title: "Error",
-            description: data.message || 'Failed to process your spin.',
-            variant: "destructive"
-          });
         }
         setIsCheckingSpinEligibility(false);
         return;
@@ -184,18 +174,8 @@ const Index = () => {
         let displayResult = '';
         if (data.result === 'win') {
           displayResult = `🎉 Winner! Code: ${data.winning_code}`;
-          toast({
-            title: "Congratulations! 🎉",
-            description: `You won! Your code is: ${data.winning_code}`,
-            variant: "default"
-          });
         } else {
           displayResult = '🙃 Try Again';
-          toast({
-            title: "Better Luck Next Time",
-            description: "Stay tuned for more events!",
-            variant: "default"
-          });
         }
         
         handleLotteryComplete(displayResult);
@@ -205,11 +185,6 @@ const Index = () => {
       console.error('Error spinning wheel:', error);
       setSpinError('Something went wrong. Please try again.');
       setIsCheckingSpinEligibility(false);
-      toast({
-        title: "Error",
-        description: "Failed to process your spin. Please try again.",
-        variant: "destructive"
-      });
     }
   };
   const resetProcess = () => {
