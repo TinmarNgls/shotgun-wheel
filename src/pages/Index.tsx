@@ -93,7 +93,10 @@ const Index = () => {
         updateStepStatus(5, 'active');
       } else {
         setIsVerified(false);
-        setVerificationError(responseText || "We couldn't verify your account. Please make sure you've followed Shotgun and enabled notifications.");
+        const errorMessage = responseText === 'Accepted' || !responseText.trim() 
+          ? 'missing error code' 
+          : responseText;
+        setVerificationError(errorMessage);
         updateStepStatus(4, 'error');
       }
     } catch (error) {
