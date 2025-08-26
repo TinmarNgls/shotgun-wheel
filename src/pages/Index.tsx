@@ -267,7 +267,7 @@ const Index = () => {
             {currentStep > 1 && <Button onClick={goToPreviousStep} variant="outline" className="flex-1">
                 Previous
               </Button>}
-            {currentStep < 5 && <Button onClick={goToNextStep} className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}>
+            {currentStep < 5 && <Button onClick={goToNextStep} variant="cta" className={`flex-1 ${currentStep === 1 ? 'w-full' : ''}`}>
                 Next
               </Button>}
           </div>}
