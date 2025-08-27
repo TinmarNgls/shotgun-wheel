@@ -130,6 +130,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_visitor_analytics: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       user_has_winning_code: {
         Args: { p_shotguner_email: string } | { p_shotguner_id: number }
         Returns: boolean

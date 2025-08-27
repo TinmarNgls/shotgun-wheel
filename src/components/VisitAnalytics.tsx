@@ -16,27 +16,13 @@ export const VisitAnalytics = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        // Get total stats
-        const { data: totals } = await supabase
-          .from('visitor_sessions')
-          .select('visit_count');
+        // Call the secure analytics function
+        const { data, error } = await supabase.functions.invoke('get-visitor-analytics');
 
-        // Get recent sessions (last 24 hours)
-        const { data: recent } = await supabase
-          .from('visitor_sessions')
-          .select('id')
-          .gte('last_visit', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
-
-        if (totals) {
-          const total_sessions = totals.length;
-          const total_visits = totals.reduce((sum, session) => sum + (session.visit_count || 0), 0);
-          const recent_sessions = recent?.length || 0;
-
-          setAnalytics({
-            total_sessions,
-            total_visits,
-            recent_sessions
-          });
+        if (error) {
+          console.error('Failed to fetch analytics:', error);
+        } else if (data) {
+          setAnalytics(data);
         }
       } catch (error) {
         console.error('Failed to fetch analytics:', error);
