@@ -83,7 +83,7 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
       <div className="relative" style={{ width: 320, height: 320 }}>
         {/* Lottie Wheel */}
         <DotLottieReact
-          src="https://lottie.host/16f0ecc4-95b6-47d8-8b06-27101aeb635b/dNEqrgYtnr.lottie"
+          src="https://lottie.host/d8e0176d-8d74-46ed-b107-4f9a7b3d1ff5/6fhNis5qmi.lottie"
           loop={true}
           autoplay={true}
           style={{ width: 320, height: 320, display: "block" }}
