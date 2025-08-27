@@ -65,8 +65,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
         {/* Lottie Wheel */}
         <DotLottieReact
           src="https://lottie.host/d8e0176d-8d74-46ed-b107-4f9a7b3d1ff5/6fhNis5qmi.lottie"
-          loop={true}
-          autoplay={true}
           style={{ width: 320, height: 320, display: "block" }}
           dotLottieRefCallback={(dotLottie) => {
             console.log("🔗 DotLottie ref callback called", { dotLottie });
