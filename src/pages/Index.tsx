@@ -155,11 +155,20 @@ const Index = () => {
       setIsVerifying(false);
     }
   };
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
+
   const handleLotteryComplete = (result: string) => {
     setFinalResult(result);
     setWheelResult(result);
     setIsSpinning(false);
     updateStepStatus(5, "completed");
+    // Scroll to bottom to show the result
+    setTimeout(() => scrollToBottom(), 100);
   };
   const handleSpin = async () => {
     if (isSpinning || isCheckingSpinEligibility) {
@@ -197,6 +206,8 @@ const Index = () => {
           "Network error. Please check your connection and try again."
         );
         setIsCheckingSpinEligibility(false);
+        // Scroll to bottom to show the error message
+        setTimeout(() => scrollToBottom(), 100);
         return;
       }
 
@@ -212,6 +223,8 @@ const Index = () => {
           );
         }
         setIsCheckingSpinEligibility(false);
+        // Scroll to bottom to show the error message
+        setTimeout(() => scrollToBottom(), 100);
         return;
       }
 
@@ -249,6 +262,8 @@ const Index = () => {
         "Network error. Please check your connection and try again."
       );
       setIsCheckingSpinEligibility(false);
+      // Scroll to bottom to show the error message
+      setTimeout(() => scrollToBottom(), 100);
     }
   };
   const resetProcess = () => {
