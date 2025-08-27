@@ -12,15 +12,6 @@ interface LotteryWheelProps {
   result?: string | null;
 }
 
-const prizes = [
-  { text: "15% Discount", value: "15% voucher", color: "text-accent" },
-  { text: "Free Event Ticket", value: "free ticket", color: "text-secondary" },
-  { text: "VIP Access", value: "vip access", color: "text-primary" },
-  { text: "Try Again", value: "no prize", color: "text-muted-foreground" },
-  { text: "Mystery Prize", value: "mystery prize", color: "text-success" },
-  { text: "20% Discount", value: "20% voucher", color: "text-accent" },
-];
-
 
 export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinning, result: externalResult }: LotteryWheelProps) => {
   const { toast } = useToast();
@@ -42,15 +33,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     }
   }, [externalIsSpinning]);
 
-  // Effect to scroll to result when it appears
-  useEffect(() => {
-    if (result) {
-      setTimeout(() => {
-        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 500);
-    }
-  }, [result]);
-
   const spinLottieWheel = () => {
     if (!playerRef.current || !isPlayerReady) {
       return;
@@ -58,7 +40,6 @@ export const LotteryWheel = ({ onComplete, onSpin, isSpinning: externalIsSpinnin
     
     // Stop first, then play the Lottie animation
     try {
-      playerRef.current.stop();
       playerRef.current.play();
     } catch (error) {
       console.error("❌ Error playing animation:", error);
