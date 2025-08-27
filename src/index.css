@@ -9,56 +9,64 @@
     /* Background & Surface Colors */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    
+
     /* Card & Surface Colors */
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-    
+
     --popover: 240 5% 15%;
     --popover-foreground: 0 0% 98%;
-    
+
     /* Brand Colors - Music/Nightlife Theme */
-    --primary: 280 100% 70%;  /* Vibrant Purple */
+    --primary: 280 100% 70%; /* Vibrant Purple */
     --primary-foreground: 0 0% 98%;
     --primary-glow: 285 100% 75%;
-    
-    --secondary: 320 100% 70%;  /* Hot Pink */
+
+    --secondary: 320 100% 70%; /* Hot Pink */
     --secondary-foreground: 0 0% 98%;
     --secondary-glow: 325 100% 75%;
-    
+
     /* UI Colors */
     --muted: 240 5% 25%;
     --muted-foreground: 240 5% 65%;
-    
-    --accent: 45 100% 70%;  /* Golden Yellow for highlights */
+
+    --accent: 45 100% 70%; /* Golden Yellow for highlights */
     --accent-foreground: 240 10% 3.9%;
-    
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    
+
     --success: 120 100% 40%;
     --success-foreground: 0 0% 98%;
-    
+
     --border: 240 5% 25%;
     --input: 240 5% 15%;
     --ring: 280 100% 70%;
-    
+
     /* Design System */
     --radius: 1rem;
-    
+
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-hero: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(240 5% 10%) 100%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--secondary))
+    );
+    --gradient-hero: url("/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png");
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(var(--card)) 0%,
+      hsl(240 5% 10%) 100%
+    );
+
     /* Shadows & Effects */
     --shadow-primary: 0 10px 40px -10px hsl(var(--primary) / 0.4);
     --shadow-secondary: 0 10px 40px -10px hsl(var(--secondary) / 0.4);
     --shadow-glow: 0 0 60px hsl(var(--primary-glow) / 0.3);
-    
+
     /* Typography */
     --text-white: 0 0% 100%;
-    
+
     /* Typography Sizes & Spacing */
     --heading-1-size: 24px;
     --heading-1-line-height: 30px;
@@ -142,36 +150,32 @@
 @layer components {
   /* Typography Components */
   .heading-1 {
-    color: #FFFFFF;
-    font-family: "Monument Extended";
+    @apply font-monument text-white uppercase;
     font-size: 24px;
     font-style: normal;
     font-weight: 900;
     line-height: normal;
-    text-transform: uppercase;
   }
-  
+
   .heading-3 {
-    color: #FFFFFF;
-    font-family: "Monument Extended";
+    @apply font-monument text-white uppercase;
     font-size: 16px;
     font-style: normal;
     font-weight: 900;
     line-height: normal;
-    text-transform: uppercase;
   }
-  
+
   .subtitle {
-    color: #FFFFFF;
+    color: #ffffff;
     font-family: "Space Grotesk";
     font-size: 21px;
     font-style: normal;
     font-weight: 400;
     line-height: 27px;
   }
-  
+
   .body-regular {
-    color: #FFFFFF;
+    color: #ffffff;
     opacity: 0.9;
     font-family: "Space Grotesk";
     font-size: 16px;
@@ -182,35 +186,35 @@
 
   /* Custom Component Styles */
   .hero-gradient {
-    background: url('/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png');
+    background: url("/lovable-uploads/de91567a-bacc-439f-bc27-46018f62c860.png");
     background-size: cover;
     background-position: center;
   }
-  
+
   .card-gradient {
     background: var(--gradient-card);
   }
-  
+
   .glow-effect {
     box-shadow: var(--shadow-glow);
   }
-  
+
   .step-card {
     @apply bg-card/90 backdrop-blur-md border border-border/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:bg-card/95;
     box-shadow: var(--shadow-primary);
     backdrop-filter: blur(16px);
   }
-  
+
   .step-card.active {
     @apply border-primary/50 bg-card/95;
     box-shadow: var(--shadow-primary), var(--shadow-glow);
     backdrop-filter: blur(20px);
   }
-  
+
   .step-card.completed {
     @apply border-success/50 bg-success/20 backdrop-blur-md;
   }
-  
+
   .cta-button {
     display: inline-flex;
     padding: 8px 16px;
@@ -218,8 +222,8 @@
     align-items: center;
     gap: 10px;
     border-radius: 4px;
-    background: #FFFFFF;
-    color: #1B1B1B;
+    background: #ffffff;
+    color: #1b1b1b;
     text-align: center;
     font-family: "Space Grotesk";
     font-size: 12px;
@@ -232,9 +236,9 @@
   }
 
   .cta-button:hover {
-    background: #F8F8F8;
+    background: #f8f8f8;
   }
-  
+
   .secondary-button {
     @apply bg-secondary hover:bg-secondary-glow text-secondary-foreground font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
     box-shadow: var(--shadow-secondary);
@@ -246,16 +250,15 @@
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite alternate;
   }
-  
+
   .animate-spin-slow {
     animation: spin 3s linear infinite;
   }
-  
+
   .animate-bounce-in {
     animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  
-  
+
   @keyframes pulse-glow {
     0% {
       box-shadow: var(--shadow-primary);
@@ -264,7 +267,7 @@
       box-shadow: var(--shadow-primary), var(--shadow-glow);
     }
   }
-  
+
   @keyframes bounce-in {
     0% {
       opacity: 0;
