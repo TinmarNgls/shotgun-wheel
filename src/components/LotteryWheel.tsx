@@ -137,7 +137,7 @@ export const LotteryWheel = ({
           return <>
                     <div className="heading-3">🎉 You've Won!</div>
                     <p className="body-regular">
-                      Congrats — you've scored a{" "}
+                      Congrats — you've scored a<br />
                       <span className="font-bold" style={{
                 background: "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
                 WebkitBackgroundClip: "text",
