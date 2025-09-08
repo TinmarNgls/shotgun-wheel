@@ -88,7 +88,7 @@ serve(async (req) => {
     if (isWinner) {
       // Get an available winning code with its details
       const { data: availableCodeData, error: codeError } = await supabase
-        .from("winning_codes")
+        .from("rewards")
         .select("code, amount, currency, expiration_date")
         .is("shotguner_email", null)
         .order("id")
