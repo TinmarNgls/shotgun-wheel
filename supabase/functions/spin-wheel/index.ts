@@ -148,8 +148,8 @@ serve(async (req) => {
       isWinner = false;
       console.log(`Admin override: forcing loss for ${shotguner_email}`);
     } else {
-      // 50% chance of winning
-      isWinner = Math.random() < 0.5;
+      // 10% chance of winning
+      isWinner = Math.random() < 0.1;
       console.log(`Random determination: ${isWinner ? "winner" : "loser"}`);
     }
 
