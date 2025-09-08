@@ -79,7 +79,7 @@ serve(async (req) => {
     // Check if user has already spun the wheel
     const { data: existingSpin, error: spinCheckError } = await supabase
       .from("wheel_spins")
-      .select("id")
+      .select("status, winning_code")
       .eq("shotguner_email", shotguner_email)
       .maybeSingle();
 
@@ -95,14 +95,37 @@ serve(async (req) => {
     }
 
     if (existingSpin) {
-      console.log(`User ${shotguner_email} has already spun the wheel`);
-      // Return consistent response to prevent user enumeration
+      console.log(`User ${shotguner_email} has already spun the wheel, returning existing result: ${existingSpin.status}`);
+      
+      let codeDetails = null;
+      if (existingSpin.status === "win" && existingSpin.winning_code) {
+        // Get the code details for existing win
+        const { data: rewardData, error: rewardError } = await supabase
+          .from("rewards")
+          .select("amount, currency, expiration_date, reward_type, reward_name")
+          .eq("code", existingSpin.winning_code)
+          .maybeSingle();
+
+        if (!rewardError && rewardData) {
+          codeDetails = {
+            code: existingSpin.winning_code,
+            amount: rewardData.amount,
+            currency: rewardData.currency,
+            expiration_date: rewardData.expiration_date,
+            reward_type: rewardData.reward_type,
+            reward_name: rewardData.reward_name,
+          };
+        }
+      }
+
       return new Response(
         JSON.stringify({
-          result: "loss",
-          message: "Sorry, you didn't win this time. Better luck next time!",
-          winning_code: null,
-          code_details: null,
+          result: existingSpin.status,
+          message: existingSpin.status === "win" 
+            ? `Congratulations! You won! Your winning code is: ${existingSpin.winning_code}`
+            : "Sorry, you didn't win this time. Better luck next time!",
+          winning_code: existingSpin.winning_code,
+          code_details: codeDetails,
         }),
         {
           status: 200,
