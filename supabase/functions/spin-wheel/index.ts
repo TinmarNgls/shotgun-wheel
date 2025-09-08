@@ -21,11 +21,54 @@ serve(async (req) => {
 
     const { shotguner_email } = await req.json();
 
-    if (!shotguner_email) {
+    if (!shotguner_email || typeof shotguner_email !== 'string') {
       return new Response(
-        JSON.stringify({ error: "Missing shotguner_email" }),
+        JSON.stringify({ error: "Invalid email format" }),
         {
           status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Basic email validation to prevent malformed requests
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(shotguner_email)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid email format" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('cf-connecting-ip') || 
+                    req.headers.get('x-forwarded-for') || 
+                    'unknown';
+
+    // Check rate limiting by IP (max 5 attempts per hour)
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: recentAttempts, error: rateLimitError } = await supabase
+      .from('wheel_spins')
+      .select('*', { count: 'exact', head: true })
+      .gte('wheel_spinned_at', oneHourAgo)
+      .or(`shotguner_email.eq.${shotguner_email}`);
+
+    if (rateLimitError) {
+      console.error("Rate limit check error:", rateLimitError);
+      // Continue without rate limiting to avoid revealing DB structure
+    }
+
+    if (recentAttempts && recentAttempts >= 5) {
+      return new Response(
+        JSON.stringify({ 
+          error: "rate_limited",
+          message: "Too many attempts. Please try again later." 
+        }),
+        {
+          status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );
@@ -53,11 +96,13 @@ serve(async (req) => {
 
     if (existingSpin) {
       console.log(`User ${shotguner_email} has already spun the wheel`);
+      // Return consistent response to prevent user enumeration
       return new Response(
         JSON.stringify({
-          error: "already_spun",
-          message:
-            "You have already spun the wheel. Only one spin per user is allowed.",
+          result: "loss",
+          message: "Sorry, you didn't win this time. Better luck next time!",
+          winning_code: null,
+          code_details: null,
         }),
         {
           status: 200,
