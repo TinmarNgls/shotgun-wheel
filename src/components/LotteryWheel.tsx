@@ -147,7 +147,7 @@ export const LotteryWheel = ({
                         {reward_name}
                       </span>
                       !<br /><br />
-                      Pick it up at the dedicated gift point. Show this code and your email to claim it:
+                      Pick it up at the dedicated gift point.
                     </p>
                     <div className="flex items-center justify-center gap-3 mt-6">
                       <div className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider" style={{
