@@ -185,8 +185,7 @@ export const LotteryWheel = ({
                         {reward_name}
                       </span>
                       !<br />
-                      You can pick it up at the dedicated location at the festival.<br />
-                      We'll ask you to share this code and your email to retrieve your gift
+                      You can pick it up at the dedicated location at the festival.
                     </p>
                     <div className="flex items-center justify-center gap-3 mt-6">
                       <div
@@ -221,6 +220,9 @@ export const LotteryWheel = ({
                         )}
                       </Button>
                     </div>
+                    <p className="body-regular text-muted-foreground mt-4">
+                      We'll ask you to share this code and your email to retrieve your gift
+                    </p>
                   </>
                 );
               } else {
