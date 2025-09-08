@@ -135,9 +135,9 @@ export const LotteryWheel = ({
                   </>;
         } else if (reward_type === "physical_reward") {
           return <>
-                    <div className="heading-3">YOU WIN 🎉</div>
+                    <div className="heading-3">🎉 You've Won!</div>
                     <p className="body-regular">
-                      Congratulations! You won a{" "}
+                      Congrats — you've scored a{" "}
                       <span className="font-bold" style={{
                 background: "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
                 WebkitBackgroundClip: "text",
@@ -146,8 +146,8 @@ export const LotteryWheel = ({
               }}>
                         {reward_name}
                       </span>
-                      !<br />
-                      You can pick it up at the dedicated location at the festival.
+                      !<br /><br />
+                      Pick it up at the dedicated gift point. Show this code and your email to claim it:
                     </p>
                     <div className="flex items-center justify-center gap-3 mt-6">
                       <div className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider" style={{
