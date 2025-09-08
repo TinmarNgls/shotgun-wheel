@@ -6,9 +6,18 @@ import { Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
+interface RewardData {
+  code: string;
+  amount?: number | null;
+  currency?: string | null;
+  expiration_date?: string | null;
+  reward_type?: string;
+  reward_name?: string;
+}
+
 interface LotteryWheelProps {
   isSpinning?: boolean;
-  result?: string | null;
+  result?: string | RewardData | null;
   lottieRef: LottieRef;
 }
 
@@ -20,6 +29,10 @@ export const LotteryWheel = ({
   const [copied, setCopied] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const result = externalResult !== undefined ? externalResult : null;
+
+  // Check if result is a win (object) or loss (string)
+  const isWin = result && typeof result === 'object' && result.code;
+  const isLoss = result && typeof result === 'string';
 
   useEffect(() => {
     if (lottieRef.current) {
@@ -46,43 +59,24 @@ export const LotteryWheel = ({
           ref={resultRef}
           className="text-center space-y-4 animate-bounce-in"
         >
-          {result.includes("Try Again") || result.includes("no prize") ? (
+          {isLoss ? (
             <>
               <div className="heading-3">You lose</div>
               <p className="body-regular">
                 Sorry, this is not your lucky day this time!
               </p>
             </>
-          ) : result.includes("Code:") ? (
+          ) : isWin ? (
             (() => {
-              const parts = result.split("Code: ");
-              const codeInfo = parts[1];
-              let code = codeInfo;
-              let amount = null;
-              let currency = null;
-              let expirationDate = null;
-
-              // Try to parse additional info if it exists
-              try {
-                if (codeInfo.includes(" | ")) {
-                  const codeParts = codeInfo.split(" | ");
-                  code = codeParts[0];
-                  if (codeParts[1]) {
-                    const amountMatch = codeParts[1].match(
-                      /(\d+\.?\d*)\s*([A-Z]{3})/
-                    );
-                    if (amountMatch) {
-                      amount = parseFloat(amountMatch[1]);
-                      currency = amountMatch[2];
-                    }
-                  }
-                  if (codeParts[2]) {
-                    expirationDate = codeParts[2];
-                  }
-                }
-              } catch (e) {
-                console.log("Could not parse additional code info");
-              }
+              const rewardData = result as RewardData;
+              const { 
+                code, 
+                amount, 
+                currency, 
+                expiration_date, 
+                reward_type,
+                reward_name 
+              } = rewardData;
 
               const getCurrencySymbol = (currency: string) => {
                 switch (currency) {
@@ -118,67 +112,151 @@ export const LotteryWheel = ({
                 }
               };
 
-              return (
-                <>
-                  <div className="heading-3">YOU WIN 🎉</div>
-                  <p className="body-regular">
-                    This is your lucky day! Here is your{" "}
-                    <span style={{ color: "#B7EBEF", fontWeight: "bold" }}>
-                      {amount && currency
-                        ? formatAmount(amount, currency)
-                        : "€5.00"}
-                    </span>{" "}
-                    code, make sure to save it
-                  </p>
-                  <div className="flex items-center justify-center gap-3 mt-6">
-                    <div
-                      className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
-                        color: "#1B1B1B",
-                      }}
-                    >
-                      {code}
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(code);
-                        setCopied(true);
-                        toast({
-                          title: "Code copied!",
-                          description:
-                            "The code has been copied to your clipboard.",
-                        });
-                        setTimeout(() => setCopied(false), 2000);
-                      }}
-                      className="h-12 w-12 p-0 hover:bg-[#323232] hover:text-white border-border"
-                    >
-                      {copied ? (
-                        <Check className="h-4 w-4" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  {expirationDate && (
-                    <p className="body-regular text-muted-foreground mt-4">
-                      Valid until {formatExpirationDate(expirationDate)}
+              // Render different messages based on reward type
+              if (reward_type === "coupon") {
+                return (
+                  <>
+                    <div className="heading-3">YOU WIN 🎉</div>
+                    <p className="body-regular">
+                      Congratulations! You won a voucher!<br />
+                      Here is your{" "}
+                      <span style={{ color: "#B7EBEF", fontWeight: "bold" }}>
+                        {amount && currency
+                          ? formatAmount(amount, currency)
+                          : "€5.00"}
+                      </span>{" "}
+                      code, make sure to save it
                     </p>
-                  )}
-                </>
-              );
+                    <div className="flex items-center justify-center gap-3 mt-6">
+                      <div
+                        className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
+                          color: "#1B1B1B",
+                        }}
+                      >
+                        {code}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(code);
+                          setCopied(true);
+                          toast({
+                            title: "Code copied!",
+                            description:
+                              "The code has been copied to your clipboard.",
+                          });
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="h-12 w-12 p-0 hover:bg-[#323232] hover:text-white border-border"
+                      >
+                        {copied ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {expiration_date && (
+                      <p className="body-regular text-muted-foreground mt-4">
+                        Valid until {formatExpirationDate(expiration_date)}
+                      </p>
+                    )}
+                  </>
+                );
+              } else if (reward_type === "physical_reward") {
+                return (
+                  <>
+                    <div className="heading-3">YOU WIN 🎉</div>
+                    <p className="body-regular">
+                      Congratulations! You won a {reward_name}!<br />
+                      You can pick it up at the dedicated location at the festival.<br />
+                      We'll ask you to share this code and your email to retrieve your gift
+                    </p>
+                    <div className="flex items-center justify-center gap-3 mt-6">
+                      <div
+                        className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
+                          color: "#1B1B1B",
+                        }}
+                      >
+                        {code}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(code);
+                          setCopied(true);
+                          toast({
+                            title: "Code copied!",
+                            description:
+                              "The code has been copied to your clipboard.",
+                          });
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="h-12 w-12 p-0 hover:bg-[#323232] hover:text-white border-border"
+                      >
+                        {copied ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </>
+                );
+              } else {
+                // Fallback for unknown reward types
+                return (
+                  <>
+                    <div className="heading-3">YOU WIN 🎉</div>
+                    <p className="body-regular">
+                      Congratulations! You won a prize!
+                    </p>
+                    <div className="flex items-center justify-center gap-3 mt-6">
+                      <div
+                        className="px-6 py-3 rounded-lg font-grotesk font-bold text-lg tracking-wider"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
+                          color: "#1B1B1B",
+                        }}
+                      >
+                        {code}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(code);
+                          setCopied(true);
+                          toast({
+                            title: "Code copied!",
+                            description:
+                              "The code has been copied to your clipboard.",
+                          });
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="h-12 w-12 p-0 hover:bg-[#323232] hover:text-white border-border"
+                      >
+                        {copied ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </>
+                );
+              }
             })()
-          ) : (
-            <>
-              <div className="heading-3">You lose</div>
-              <p className="body-regular">
-                Sorry, this is not your lucky day this time!
-              </p>
-            </>
-          )}
+          ) : null}
         </div>
       )}
     </div>

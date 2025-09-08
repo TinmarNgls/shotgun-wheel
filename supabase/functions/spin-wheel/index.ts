@@ -134,7 +134,7 @@ serve(async (req) => {
       // Get an available winning code with its details
       const { data: availableCodeData, error: codeError } = await supabase
         .from("rewards")
-        .select("code, amount, currency, expiration_date")
+        .select("code, amount, currency, expiration_date, reward_type, reward_name")
         .is("shotguner_email", null)
         .order("id")
         .limit(1)
@@ -160,6 +160,8 @@ serve(async (req) => {
           amount: availableCodeData.amount,
           currency: availableCodeData.currency,
           expiration_date: availableCodeData.expiration_date,
+          reward_type: availableCodeData.reward_type,
+          reward_name: availableCodeData.reward_name,
         };
         console.log(
           `Assigned winning code: ${winningCode} with details:`,

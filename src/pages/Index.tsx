@@ -34,9 +34,9 @@ const Index = () => {
   const [email, setEmail] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationError, setVerificationError] = useState("");
-  const [finalResult, setFinalResult] = useState<string | null>(null);
+  const [finalResult, setFinalResult] = useState<any>(null);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [wheelResult, setWheelResult] = useState<string | null>(null);
+  const [wheelResult, setWheelResult] = useState<any>(null);
   const [isVerified, setIsVerified] = useState(false);
   const [shotgunerId, setShotgunerId] = useState<number | null>(null);
   const [spinError, setSpinError] = useState("");
@@ -162,7 +162,7 @@ const Index = () => {
     });
   };
 
-  const handleLotteryComplete = (result: string) => {
+  const handleLotteryComplete = (result: any) => {
     setFinalResult(result);
     setWheelResult(result);
     setIsSpinning(false);
@@ -235,26 +235,16 @@ const Index = () => {
 
       // Simulate wheel spinning animation
       setTimeout(() => {
-        let displayResult = "";
         if (data.result === "win") {
-          let codeText = `🎉 Winner! Code: ${data.winning_code}`;
-
-          // Add amount, currency, and expiration if available
-          if (data.code_details) {
-            const { amount, currency, expiration_date } = data.code_details;
-            if (amount && currency) {
-              codeText += ` | ${amount} ${currency}`;
-            }
-            if (expiration_date) {
-              codeText += ` | ${expiration_date}`;
-            }
-          }
-
-          displayResult = codeText;
+          // Pass structured reward data instead of a string
+          const rewardData = {
+            code: data.winning_code,
+            ...data.code_details
+          };
+          handleLotteryComplete(rewardData);
         } else {
-          displayResult = "🙃 Try Again";
+          handleLotteryComplete("🙃 Try Again");
         }
-        handleLotteryComplete(displayResult);
       }, 3000);
     } catch (error) {
       console.error("Network error spinning wheel:", error);
