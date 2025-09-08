@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      rewards: {
+        Row: {
+          amount: number | null
+          assigned_at: string | null
+          code: string
+          created_at: string
+          currency: string | null
+          expiration_date: string | null
+          id: number
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          shotguner_email: string | null
+        }
+        Insert: {
+          amount?: number | null
+          assigned_at?: string | null
+          code: string
+          created_at?: string
+          currency?: string | null
+          expiration_date?: string | null
+          id?: number
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          shotguner_email?: string | null
+        }
+        Update: {
+          amount?: number | null
+          assigned_at?: string | null
+          code?: string
+          created_at?: string
+          currency?: string | null
+          expiration_date?: string | null
+          id?: number
+          reward_name?: string
+          reward_type?: Database["public"]["Enums"]["reward_type"]
+          shotguner_email?: string | null
+        }
+        Relationships: []
+      }
       visitor_sessions: {
         Row: {
           created_at: string
@@ -74,52 +113,13 @@ export type Database = {
         }
         Relationships: []
       }
-      winning_codes: {
-        Row: {
-          amount: number | null
-          assigned_at: string | null
-          code: string
-          created_at: string
-          currency: string | null
-          expiration_date: string | null
-          id: number
-          shotguner_email: string | null
-        }
-        Insert: {
-          amount?: number | null
-          assigned_at?: string | null
-          code: string
-          created_at?: string
-          currency?: string | null
-          expiration_date?: string | null
-          id?: number
-          shotguner_email?: string | null
-        }
-        Update: {
-          amount?: number | null
-          assigned_at?: string | null
-          code?: string
-          created_at?: string
-          currency?: string | null
-          expiration_date?: string | null
-          id?: number
-          shotguner_email?: string | null
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       assign_winning_code: {
-        Args:
-          | { p_code: string; p_shotguner_email: string }
-          | {
-              p_code: string
-              p_shotguner_email: string
-              p_shotguner_id: number
-            }
+        Args: { p_code: string; p_shotguner_email: string }
         Returns: boolean
       }
       generate_random_code: {
@@ -135,12 +135,12 @@ export type Database = {
         Returns: Json
       }
       user_has_winning_code: {
-        Args: { p_shotguner_email: string } | { p_shotguner_id: number }
+        Args: { p_shotguner_email: string }
         Returns: boolean
       }
     }
     Enums: {
-      [_ in never]: never
+      reward_type: "coupon" | "physical_reward"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -267,6 +267,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      reward_type: ["coupon", "physical_reward"],
+    },
   },
 } as const
