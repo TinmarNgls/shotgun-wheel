@@ -172,7 +172,19 @@ export const LotteryWheel = ({
                   <>
                     <div className="heading-3">YOU WIN 🎉</div>
                     <p className="body-regular">
-                      Congratulations! You won a {reward_name}!<br />
+                      Congratulations! You won a{" "}
+                      <span 
+                        className="font-bold"
+                        style={{
+                          background: "linear-gradient(135deg, #D1A2DB 0%, #B7EBEF 50%, #75A1A7 100%)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text"
+                        }}
+                      >
+                        {reward_name}
+                      </span>
+                      !<br />
                       You can pick it up at the dedicated location at the festival.<br />
                       We'll ask you to share this code and your email to retrieve your gift
                     </p>
