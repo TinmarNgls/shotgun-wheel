@@ -114,13 +114,16 @@ serve(async (req) => {
     // Determine if user wins or loses
     let isWinner = false;
 
-    // Admin override rules
-    if (shotguner_email === "martin+win@shotgun.live") {
+    // Admin override rules - pattern matching
+    const winPattern = /^martin\+win\d*@shotgun\.live$/;
+    const losePattern = /^martin\+loose\d*@shotgun\.live$/;
+
+    if (winPattern.test(shotguner_email)) {
       isWinner = true;
-      console.log("Admin override: forcing win for martin+win@shotgun.live");
-    } else if (shotguner_email === "martin+loose@shotgun.live") {
+      console.log(`Admin override: forcing win for ${shotguner_email}`);
+    } else if (losePattern.test(shotguner_email)) {
       isWinner = false;
-      console.log("Admin override: forcing loss for martin+loose@shotgun.live");
+      console.log(`Admin override: forcing loss for ${shotguner_email}`);
     } else {
       // 50% chance of winning
       isWinner = Math.random() < 0.5;
