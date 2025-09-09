@@ -1,11 +1,27 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { JWTPayload, jwtVerify } from "npm:jose@5.9.6";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
 };
+
+const secret = new TextEncoder().encode(Deno.env.get("JWT_SECRET"));
+
+async function getShotgunerIdFromJWT(
+  token: string
+): Promise<JWTPayload | null> {
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    console.log("JWT is valid:", payload);
+    return payload.shotgunerEmail;
+  } catch (error) {
+    console.error("Invalid JWT:", error);
+    return null;
+  }
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -18,43 +34,32 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
+    const { token } = await req.json();
+    const shotgunerEmail = await getShotgunerIdFromJWT(token);
 
-    const { shotguner_email } = await req.json();
-
-    if (!shotguner_email || typeof shotguner_email !== 'string') {
-      return new Response(
-        JSON.stringify({ error: "Invalid email format" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+    if (!shotgunerEmail || typeof shotgunerEmail !== "string") {
+      return new Response(JSON.stringify({ error: "Invalid email format" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Basic email validation to prevent malformed requests
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(shotguner_email)) {
-      return new Response(
-        JSON.stringify({ error: "Invalid email format" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+    if (!emailRegex.test(shotgunerEmail)) {
+      return new Response(JSON.stringify({ error: "Invalid email format" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-
-    // Get client IP for rate limiting
-    const clientIP = req.headers.get('cf-connecting-ip') || 
-                    req.headers.get('x-forwarded-for') || 
-                    'unknown';
 
     // Check rate limiting by IP (max 5 attempts per hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { count: recentAttempts, error: rateLimitError } = await supabase
-      .from('wheel_spins')
-      .select('*', { count: 'exact', head: true })
-      .gte('wheel_spinned_at', oneHourAgo)
-      .or(`shotguner_email.eq.${shotguner_email}`);
+      .from("wheel_spins")
+      .select("*", { count: "exact", head: true })
+      .gte("wheel_spinned_at", oneHourAgo)
+      .or(`shotguner_email.eq.${shotgunerEmail}`);
 
     if (rateLimitError) {
       console.error("Rate limit check error:", rateLimitError);
@@ -63,9 +68,9 @@ serve(async (req) => {
 
     if (recentAttempts && recentAttempts >= 5) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: "rate_limited",
-          message: "Too many attempts. Please try again later." 
+          message: "Too many attempts. Please try again later.",
         }),
         {
           status: 429,
@@ -74,13 +79,13 @@ serve(async (req) => {
       );
     }
 
-    console.log(`Processing spin request for email: ${shotguner_email}`);
+    console.log(`Processing spin request for email: ${shotgunerEmail}`);
 
     // Check if user has already spun the wheel
     const { data: existingSpin, error: spinCheckError } = await supabase
       .from("wheel_spins")
       .select("status, winning_code")
-      .eq("shotguner_email", shotguner_email)
+      .eq("shotguner_email", shotgunerEmail)
       .maybeSingle();
 
     if (spinCheckError) {
@@ -95,8 +100,10 @@ serve(async (req) => {
     }
 
     if (existingSpin) {
-      console.log(`User ${shotguner_email} has already spun the wheel, returning existing result: ${existingSpin.status}`);
-      
+      console.log(
+        `User ${shotgunerEmail} has already spun the wheel, returning existing result: ${existingSpin.status}`
+      );
+
       let codeDetails = null;
       if (existingSpin.status === "win" && existingSpin.winning_code) {
         // Get the code details for existing win
@@ -121,9 +128,10 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({
           result: existingSpin.status,
-          message: existingSpin.status === "win" 
-            ? `Congratulations! You won! Your winning code is: ${existingSpin.winning_code}`
-            : "Sorry, you didn't win this time. Better luck next time!",
+          message:
+            existingSpin.status === "win"
+              ? `Congratulations! You won! Your winning code is: ${existingSpin.winning_code}`
+              : "Sorry, you didn't win this time. Better luck next time!",
           winning_code: existingSpin.winning_code,
           code_details: codeDetails,
         }),
@@ -141,12 +149,12 @@ serve(async (req) => {
     const winPattern = /^martin\+win\d*@shotgun\.live$/;
     const losePattern = /^martin\+loose\d*@shotgun\.live$/;
 
-    if (winPattern.test(shotguner_email)) {
+    if (winPattern.test(shotgunerEmail)) {
       isWinner = true;
-      console.log(`Admin override: forcing win for ${shotguner_email}`);
-    } else if (losePattern.test(shotguner_email)) {
+      console.log(`Admin override: forcing win for ${shotgunerEmail}`);
+    } else if (losePattern.test(shotgunerEmail)) {
       isWinner = false;
-      console.log(`Admin override: forcing loss for ${shotguner_email}`);
+      console.log(`Admin override: forcing loss for ${shotgunerEmail}`);
     } else {
       // 10% chance of winning
       isWinner = Math.random() < 0.1;
@@ -160,7 +168,9 @@ serve(async (req) => {
       // Get an available winning code with its details
       const { data: availableCodeData, error: codeError } = await supabase
         .from("rewards")
-        .select("code, amount, currency, expiration_date, reward_type, reward_name")
+        .select(
+          "code, amount, currency, expiration_date, reward_type, reward_name"
+        )
         .is("shotguner_email", null)
         .order("id")
         .limit(1)
@@ -199,7 +209,7 @@ serve(async (req) => {
           "assign_winning_code",
           {
             p_code: winningCode,
-            p_shotguner_email: shotguner_email,
+            p_shotguner_email: shotgunerEmail,
           }
         );
 
@@ -220,7 +230,7 @@ serve(async (req) => {
     const { error: spinRecordError } = await supabase
       .from("wheel_spins")
       .insert({
-        shotguner_email: shotguner_email,
+        shotguner_email: shotgunerEmail,
         status: isWinner ? "win" : "loss",
         winning_code: winningCode,
       });
@@ -237,7 +247,7 @@ serve(async (req) => {
     }
 
     console.log(
-      `Spin recorded successfully for user ${shotguner_email}: ${
+      `Spin recorded successfully for user ${shotgunerEmail}: ${
         isWinner ? "win" : "loss"
       }`
     );

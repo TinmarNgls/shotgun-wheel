@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.get-visitor-analytics]
 verify_jwt = false
+
+[functions.verify-email]
+verify_jwt = false

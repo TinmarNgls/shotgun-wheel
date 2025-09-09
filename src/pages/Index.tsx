@@ -18,6 +18,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useVisitTracking } from "@/hooks/useVisitTracking";
 import shotgunLogo from "/lovable-uploads/0b1ac01c-62e0-4f48-97e9-be38dda9a59a.png";
+import ReCAPTCHA from "react-google-recaptcha";
+import { FunctionsHttpError } from "@supabase/supabase-js";
+
 type StepStatus = "pending" | "active" | "completed" | "error";
 interface Step {
   id: number;
@@ -27,8 +30,8 @@ interface Step {
 }
 const Index = () => {
   const playerRef = useRef(null);
+  const recaptchaRef = useRef(null);
 
-  const { toast } = useToast();
   useVisitTracking(); // Track visits
   const [currentStep, setCurrentStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -38,6 +41,7 @@ const Index = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [wheelResult, setWheelResult] = useState<any>(null);
   const [isVerified, setIsVerified] = useState(false);
+  const tokenRef = useRef<string | null>(null);
   const [shotgunerId, setShotgunerId] = useState<number | null>(null);
   const [spinError, setSpinError] = useState("");
   const [isCheckingSpinEligibility, setIsCheckingSpinEligibility] =
@@ -96,59 +100,76 @@ const Index = () => {
     setCurrentStep(3);
     updateStepStatus(3, "active");
   };
+
+  const [captchaValue, setCaptchaValue] = useState("");
   const handleEmailSubmit = async () => {
-    if (!email.trim()) return;
+    if (!email.trim()) {
+      return;
+    }
+
     updateStepStatus(3, "completed");
     setCurrentStep(4);
     updateStepStatus(4, "active");
     setIsVerifying(true);
     setVerificationError("");
     try {
-      // Webhook call to Make.com
-      const response = await fetch(
-        "https://hook.eu1.make.com/v47hppeo14q2w5klcrfgpjdsv3ohv3ah",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-          }),
-        }
-      );
-      const responseText = await response.text();
+      // Call our new Supabase verify-email function
+      const { data, error } = await supabase.functions.invoke("verify-email", {
+        body: {
+          email: email.trim(),
+          captchaValue,
+        },
+      });
+      console.log("Email verification response - data:", data);
+      console.log("Email verification response - error:", error);
 
-      // Try to parse JSON response to get shotguner_id
-      let webhookData = null;
-      try {
-        webhookData = JSON.parse(responseText);
-      } catch (e) {
-        // Fallback to text response for legacy support
+      let errorMessage = "";
+      if (error instanceof FunctionsHttpError) {
+        const errorData = await error.context.json();
+        errorMessage = errorData?.message ?? errorData?.error ?? errorData;
+      } else {
+        errorMessage =
+          "Network error. Please check your connection and try again.";
       }
-      if (
-        responseText === "OK" ||
-        (webhookData && webhookData.status === "OK")
-      ) {
+
+      if (error) {
+        setVerificationError(errorMessage);
+        updateStepStatus(4, "error");
+        return;
+      }
+
+      // Handle successful response
+      if (data && data.status === "OK") {
+        tokenRef.current = data.token;
         setIsVerified(true);
 
-        // Extract shotguner_id if available in JSON response
-        if (webhookData && webhookData.shotguner_id) {
-          setShotgunerId(webhookData.shotguner_id);
+        // Extract shotguner_id if available
+        if (data.shotguner_id) {
+          setShotgunerId(data.shotguner_id);
         }
         updateStepStatus(4, "completed");
         setCurrentStep(5);
         updateStepStatus(5, "active");
       } else {
         setIsVerified(false);
-        const errorMessage =
-          responseText === "Accepted" || !responseText.trim()
-            ? "missing error code"
-            : responseText;
+
+        // Handle error responses
+        let errorMessage = "Email verification failed";
+        if (data && data.error === "invalid") {
+          errorMessage = data.message || "Invalid captcha. Please try again.";
+        } else if (data && data.message) {
+          errorMessage = data.message;
+        } else if (typeof data === "string") {
+          // Handle text responses for backward compatibility
+          errorMessage =
+            data === "Accepted" || !data.trim() ? "missing error code" : data;
+        }
+
         setVerificationError(errorMessage);
         updateStepStatus(4, "error");
       }
     } catch (error) {
+      console.error("Error in handleEmailSubmit:", error);
       setVerificationError("Something went wrong. Please try again.");
       updateStepStatus(4, "error");
     } finally {
@@ -158,7 +179,7 @@ const Index = () => {
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
@@ -175,26 +196,13 @@ const Index = () => {
       return;
     }
 
-    // Check if we have shotgunerId, create a unique fallback based on email for testing
-    const userShotgunerId =
-      shotgunerId ||
-      Math.abs(
-        email.split("").reduce((a, b) => {
-          a = (a << 5) - a + b.charCodeAt(0);
-          return a & a;
-        }, 0)
-      );
-
     setIsCheckingSpinEligibility(true);
     setSpinError("");
 
     try {
       // Call our backend spin function
       const { data, error } = await supabase.functions.invoke("spin-wheel", {
-        body: {
-          shotguner_id: userShotgunerId,
-          shotguner_email: email,
-        },
+        body: { token: tokenRef.current },
       });
       console.log("Spin response - data:", data);
       console.log("Spin response - error:", error);
@@ -405,6 +413,11 @@ const Index = () => {
               </p>
 
               <div className="space-y-4 max-w-sm mx-auto">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  onChange={(value) => setCaptchaValue(value)}
+                  sitekey={"6LeleMIrAAAAAAhhnYHz2OWd-2Ru1PqTCTsq99Sk"}
+                />
                 <Input
                   type="email"
                   placeholder="your-email@example.com"
@@ -414,7 +427,7 @@ const Index = () => {
                 />
                 <Button
                   onClick={handleEmailSubmit}
-                  disabled={!email.trim() || isVerifying}
+                  disabled={!email.trim() || isVerifying || !captchaValue}
                   variant="cta"
                   className="w-full"
                 >
