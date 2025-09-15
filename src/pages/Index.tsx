@@ -327,7 +327,7 @@ const Index = () => {
           </div>
           <h1 className="heading-1">Shotgun Lucky Jogwheel</h1>
           <p className="body-regular max-w-lg mx-auto px-6">
-            Complete these steps for a chance to win a prize!
+            Complete these steps and get a chance to win a Prize!
           </p>
         </div>
 
