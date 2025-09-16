@@ -368,6 +368,18 @@ const Index = () => {
               </div>
 
               <AppStoreBadges onDownload={handleDownload} />
+              
+              <p className="body-regular text-muted-foreground">
+                <a 
+                  href="https://shotguntheapp.notion.site/Shotgun-Lucky-Jogwheel-Game-Rules-26c655f4cc2a8020a2d6e04d1a0bd4d9" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="underline hover:text-foreground transition-colors"
+                >
+                  Click here
+                </a>
+                {" "}to access the Game Rules
+              </p>
             </div>
           </Card>
         )}
