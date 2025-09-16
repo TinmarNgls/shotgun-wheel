@@ -361,14 +361,18 @@ const Index = () => {
 
         {/* Step 1: Download */}
         {currentStep === 1 && (
-          <Card className="step-card active">
-            <div className="text-center space-y-6 py-4">
-              <div className="flex items-center justify-center space-x-2">
-                <span className="heading-3">Download Shotgun App</span>
-              </div>
+          <>
+            <Card className="step-card active">
+              <div className="text-center space-y-6 py-4">
+                <div className="flex items-center justify-center space-x-2">
+                  <span className="heading-3">Download Shotgun App</span>
+                </div>
 
-              <AppStoreBadges onDownload={handleDownload} />
-              
+                <AppStoreBadges onDownload={handleDownload} />
+              </div>
+            </Card>
+            
+            <div className="text-center">
               <p className="body-regular text-muted-foreground">
                 <a 
                   href="https://shotguntheapp.notion.site/Shotgun-Lucky-Jogwheel-Game-Rules-26c655f4cc2a8020a2d6e04d1a0bd4d9" 
@@ -381,7 +385,7 @@ const Index = () => {
                 {" "}to access the Game Rules
               </p>
             </div>
-          </Card>
+          </>
         )}
 
         {/* Step 2: Follow */}
